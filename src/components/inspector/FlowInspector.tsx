@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Copy, Cable, Plus, Trash2, Ungroup, ArrowLeftRight } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Copy, Cable, Plus, Trash2, Ungroup, ArrowLeftRight, Group } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Switch } from "@/components/ui/switch";
@@ -11,7 +11,7 @@ import {
   type Selection,
   type Stroke,
 } from "@/lib/flowchart/model";
-import { addEdge, addNode, duplicateNode, removeEdge, removeNode, reverseEdge, setDirection, setEdgeBothEnds, setEdgeHead, ungroup, updateEdge, updateGroup, updateNode } from "@/lib/flowchart/ops";
+import { addEdge, addNode, duplicateNode, groupItems, removeEdge, removeNode, reverseEdge, setDirection, setEdgeBothEnds, setEdgeHead, ungroup, updateEdge, updateGroup, updateNode } from "@/lib/flowchart/ops";
 import { getStyleProp, parsePixels, setStyleProp, toHexColor } from "@/lib/flowchart/styles";
 import { useTranslate } from "@/lib/i18n";
 import { withParams } from "@/lib/translate";
@@ -23,6 +23,8 @@ const FILL_PRESETS = ["#fde68a", "#bbf7d0", "#bfdbfe", "#fbcfe8", "#ddd6fe", "#f
 interface Props {
   model: FlowModel;
   selection: Selection;
+  /** Every selected element. More than one when several are selected. */
+  selected: NonNullable<Selection>[];
   /** `nextSelection`: undefined keeps the current selection, null clears it. */
   onChange(model: FlowModel, nextSelection?: Selection): void;
   onStartConnect(sourceId: string): void;
@@ -31,11 +33,36 @@ interface Props {
   focusToken: number;
 }
 
-export function FlowInspector({ model, selection, onChange, onStartConnect, renderedColors, focusToken }: Props) {
+export function FlowInspector({ model, selection, selected, onChange, onStartConnect, renderedColors, focusToken }: Props) {
   const t = useTranslate();
   const node = selection?.kind === "node" ? model.nodes.find((n) => n.id === selection.id) : undefined;
   const edge = selection?.kind === "edge" ? model.edges.find((e) => e.id === selection.id) : undefined;
   const group = selection?.kind === "group" ? model.groups.find((g) => g.id === selection.id) : undefined;
+
+  if (selected.length > 1) {
+    const ids = selected.filter((item) => item.kind !== "edge").map((item) => item.id);
+    return (
+      <div data-testid="multi-inspector">
+        <Section title={withParams(t.selectedCount(selected.length), { count: selected.length })}>
+          <p className="text-muted-foreground text-xs leading-relaxed">{t.multiSelectHint}</p>
+        </Section>
+        <Section>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            data-testid="group-selected"
+            onClick={() => {
+              const grouped = groupItems(model, ids, t.newGroupTitle);
+              if (grouped.id) onChange(grouped.model, { kind: "group", id: grouped.id });
+            }}
+          >
+            <Group /> {t.groupSelected}
+          </Button>
+        </Section>
+      </div>
+    );
+  }
 
   if (node && selection) {
     const colors = renderedColors(selection);

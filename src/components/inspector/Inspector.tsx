@@ -12,6 +12,8 @@ interface Props {
   flow: FlowModel | null;
   pie: PieModel | null;
   selection: Selection;
+  /** All selected elements (more than one after a Shift-click). */
+  selected: NonNullable<Selection>[];
   hasError: boolean;
   focusToken: number;
   onFlowChange(model: FlowModel, nextSelection?: Selection): void;
@@ -28,7 +30,7 @@ export function Inspector(props: Props) {
 
   let body;
   if (kind === "flowchart" && flow) {
-    body = <FlowInspector model={flow} selection={props.selection} onChange={props.onFlowChange} onStartConnect={props.onStartConnect} renderedColors={props.renderedColors} focusToken={props.focusToken} />;
+    body = <FlowInspector model={flow} selection={props.selection} selected={props.selected} onChange={props.onFlowChange} onStartConnect={props.onStartConnect} renderedColors={props.renderedColors} focusToken={props.focusToken} />;
   } else if (kind === "pie" && pie) {
     body = <PieInspector model={pie} onChange={props.onPieChange} />;
   } else if (hasError && (kind === "flowchart" || kind === "pie")) {

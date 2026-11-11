@@ -13,7 +13,8 @@ The Mermaid text in CodeMirror is the only source of truth. A visual edit parses
 - Visual editing: flowchart and pie only. Other diagram types show a message and use the code editor.
 - Comments inside the diagram are lost on a visual edit. Front matter and `%%{init}%%` before the keyword are kept.
 - No manual node positions: Mermaid auto-layout decides placement.
-- Not built: PDF export, AI button (needs a backend), multi-select, creating subgraphs visually.
+- Not built: PDF export, AI button (needs a backend), box (marquee) selection.
+- Grouping: Shift/Ctrl/Cmd-click toggles nodes and groups into a multi-selection (arrows drop out). The "Group" button or Ctrl/Cmd+G calls `groupItems` (`ops.ts`). New group id is `G<n>`. Same parent for all items → group is nested there; mixed parents → top level. Groups emptied by the move are removed together with arrows that pointed at them. Ungroup is the inverse.
 
 ### Why
 Keeping one source of truth avoids sync bugs between text and a separate visual state, and gives undo/redo for free through CodeMirror history.

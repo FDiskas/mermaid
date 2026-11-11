@@ -24,14 +24,16 @@ interface Props {
   emptyMessage: string;
   /** The visual editor is active: elements can be clicked, selected and renamed. */
   editable: boolean;
-  selection: Selection;
+  /** Every selected element. More than one when the user Shift-clicked. */
+  selected: NonNullable<Selection>[];
   /** Node picked as the start of a new arrow. */
   connectSource: string | null;
   connecting: boolean;
   /** Changing this value refits the diagram to the canvas. */
   fitToken: number;
   dimmed?: boolean;
-  onSelect(selection: Selection): void;
+  /** `additive`: Shift, Ctrl or Cmd was held, so the click adds to or removes from the selection. */
+  onSelect(selection: Selection, additive: boolean): void;
   getLabel(selection: NonNullable<Selection>): string | undefined;
   onCommitLabel(selection: NonNullable<Selection>, text: string): void;
   onScaleChange(scale: number): void;
@@ -46,7 +48,7 @@ const FIT_TOP = 72; // room for the floating toolbar
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 export const PreviewCanvas = forwardRef<PreviewCanvasHandle, Props>(function PreviewCanvas(props, ref) {
-  const { diagram, emptyMessage, editable, selection, connectSource, connecting, fitToken, dimmed, onSelect, getLabel, onCommitLabel, onScaleChange } = props;
+  const { diagram, emptyMessage, editable, selected, connectSource, connecting, fitToken, dimmed, onSelect, getLabel, onCommitLabel, onScaleChange } = props;
   const container = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<View>({ x: 0, y: 0, k: 1 });
@@ -150,9 +152,9 @@ export const PreviewCanvas = forwardRef<PreviewCanvasHandle, Props>(function Pre
     if (!root) return;
     root.querySelectorAll(".mv-selected, .mv-connect-source").forEach((el) => el.classList.remove("mv-selected", "mv-connect-source"));
     if (!editable) return;
-    if (selection) findTargetElement(root, selection)?.classList.add("mv-selected");
+    for (const item of selected) findTargetElement(root, item)?.classList.add("mv-selected");
     if (connectSource) findTargetElement(root, { kind: "node", id: connectSource })?.classList.add("mv-connect-source");
-  }, [diagram, selection, connectSource, editable]);
+  }, [diagram, selected, connectSource, editable]);
 
   const drag = useRef<{ x: number; y: number; view: View; pointerId: number } | null>(null);
 
@@ -183,7 +185,7 @@ export const PreviewCanvas = forwardRef<PreviewCanvasHandle, Props>(function Pre
       return;
     }
     if (!editable) return;
-    onSelect(targetFromElement(event.target as Element));
+    onSelect(targetFromElement(event.target as Element), event.shiftKey || event.metaKey || event.ctrlKey);
   };
 
   const onDoubleClick = (event: React.MouseEvent) => {

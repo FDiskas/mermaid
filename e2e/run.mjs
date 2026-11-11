@@ -233,6 +233,37 @@ if (ONLY === "flowchart") {
   });
   assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
   await page.context().close();
+
+  const multi = await open({ code: FLOW });
+  await check("Shift-click selects several nodes and the Group button wraps them", async () => {
+    await node(multi, "Process request").click();
+    await node(multi, "Valid?").click({ modifiers: ["Shift"] });
+    await multi.waitForSelector("[data-testid=multi-inspector]");
+    const highlighted = await multi.$$eval("g.node.mv-selected", (els) => els.length);
+    assert(highlighted === 2, `expected 2 highlighted nodes, got ${highlighted}`);
+    await multi.screenshot({ path: OUT + "06-multi-select.png" });
+    await multi.click("[data-testid=group-selected]");
+    const code = await waitCode(multi, (c) => c.includes("subgraph G1"), "group");
+    assert(/subgraph G1\["New group"\]\n\s+B\n\s+C\n\s+end/.test(code), "group should hold B and C:\n" + code);
+    await multi.waitForSelector("[data-testid=group-inspector]");
+    await multi.waitForSelector("g.cluster.mv-selected");
+    await multi.screenshot({ path: OUT + "07-grouped.png" });
+  });
+  await check("Shift-click again removes a node from the selection", async () => {
+    await multi.keyboard.press("Escape");
+    await node(multi, "Start").click();
+    await node(multi, "Done").click({ modifiers: ["Shift"] });
+    await node(multi, "Done").click({ modifiers: ["Shift"] });
+    await multi.waitForSelector("[data-testid=node-inspector]");
+  });
+  await check("ungroup brings the nodes back to the top level", async () => {
+    await multi.locator("g.cluster").first().locator(".cluster-label, rect").first().click({ force: true });
+    await multi.waitForSelector("[data-testid=group-inspector]");
+    await multi.getByRole("button", { name: /ungroup/i }).click();
+    await waitCode(multi, (c) => !c.includes("subgraph"), "ungroup");
+  });
+  assert(multi.errors.length === 0, "console errors: " + multi.errors.join(" | "));
+  await multi.context().close();
 }
 
 /* ---------- Pie chart + export ---------- */

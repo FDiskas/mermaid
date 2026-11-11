@@ -19,7 +19,7 @@ import { usePersistentState } from "@/hooks/usePersistentState";
 import { useSnapshots, type Snapshot } from "@/hooks/useSnapshots";
 import { detectDiagramKind } from "@/lib/diagram-type";
 import { labelToText, type FlowModel, type Selection } from "@/lib/flowchart/model";
-import { addEdge, addNode, removeEdge, removeNode, ungroup, updateEdge, updateGroup, updateNode } from "@/lib/flowchart/ops";
+import { addEdge, addNode, groupItems, removeEdge, removeNode, ungroup, updateEdge, updateGroup, updateNode } from "@/lib/flowchart/ops";
 import { serializeFlowchart } from "@/lib/flowchart/serialize";
 import { useTranslate } from "@/lib/i18n";
 import type { DiagramTheme } from "@/lib/mermaid-runtime";
@@ -48,7 +48,7 @@ export function App() {
   const [expanded, setExpanded] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [selection, setSelection] = useState<Selection>(null);
+  const [selected, setSelected] = useState<NonNullable<Selection>[]>([]);
   const [connect, setConnect] = useState<{ source: string | null } | null>(null);
   const [fitToken, setFitToken] = useState(0);
   const [focusToken, setFocusToken] = useState(0);
@@ -58,6 +58,10 @@ export function App() {
 
   const editor = useRef<CodeEditorHandle>(null);
   const canvas = useRef<PreviewCanvasHandle>(null);
+
+  /** The single selected element, or null when nothing or several elements are selected. */
+  const selection: Selection = selected.length === 1 ? selected[0]! : null;
+  const setSelection = useCallback((next: Selection) => setSelected(next ? [next] : []), []);
 
   const dark = appTheme === "dark";
   const diagramTheme: DiagramTheme = themeChoice === "auto" ? (dark ? "dark" : "default") : themeChoice;
@@ -112,13 +116,13 @@ export function App() {
 
   // Drop the selection when its element no longer exists.
   useEffect(() => {
-    if (!flow || !selection) return;
-    const exists =
-      selection.kind === "node" ? flow.nodes.some((n) => n.id === selection.id)
-      : selection.kind === "edge" ? flow.edges.some((e) => e.id === selection.id)
-      : flow.groups.some((g) => g.id === selection.id);
-    if (!exists) setSelection(null);
-  }, [flow, selection]);
+    if (!flow) return;
+    const exists = (item: NonNullable<Selection>) =>
+      item.kind === "node" ? flow.nodes.some((n) => n.id === item.id)
+      : item.kind === "edge" ? flow.edges.some((e) => e.id === item.id)
+      : flow.groups.some((g) => g.id === item.id);
+    setSelected((current) => (current.every(exists) ? current : current.filter(exists)));
+  }, [flow]);
 
   useEffect(() => {
     if (kind !== "flowchart") {
@@ -139,13 +143,23 @@ export function App() {
   }, [flow, selection, t, commitFlow, setInspectorOpen]);
 
   const deleteSelection = useCallback(() => {
-    if (!flow || !selection) return;
-    if (selection.kind === "node") commitFlow(removeNode(flow, selection.id), null);
-    else if (selection.kind === "edge") commitFlow(removeEdge(flow, selection.id), null);
-    else commitFlow(ungroup(flow, selection.id), null);
-  }, [flow, selection, commitFlow]);
+    if (!flow || selected.length === 0) return;
+    // Several selected items are only nodes and groups (see handleSelect), so ids stay valid while we apply them in turn.
+    const next = selected.reduce((model, item) => {
+      if (item.kind === "node") return removeNode(model, item.id);
+      if (item.kind === "edge") return removeEdge(model, item.id);
+      return ungroup(model, item.id);
+    }, flow);
+    commitFlow(next, null);
+  }, [flow, selected, commitFlow]);
 
-  const handleSelect = (next: Selection) => {
+  const groupSelection = useCallback(() => {
+    if (!flow || selected.length < 2) return;
+    const grouped = groupItems(flow, selected.filter((item) => item.kind !== "edge").map((item) => item.id), t.newGroupTitle);
+    if (grouped.id) commitFlow(grouped.model, { kind: "group", id: grouped.id });
+  }, [flow, selected, t, commitFlow]);
+
+  const handleSelect = (next: Selection, additive = false) => {
     if (connect) {
       if (next?.kind !== "node") return;
       if (!connect.source) {
@@ -157,6 +171,18 @@ export function App() {
       commitFlow(withEdge, { kind: "edge", id: withEdge.edges.at(-1)!.id });
       setConnect(null);
       return;
+    }
+    if (additive) {
+      if (!next) return;
+      if (next.kind !== "edge") {
+        // Shift-click toggles a node or group in the selection. Arrows cannot be grouped, so they drop out.
+        setSelected((current) => {
+          const items = current.filter((item) => item.kind !== "edge");
+          const present = items.some((item) => item.kind === next.kind && item.id === next.id);
+          return present ? items.filter((item) => !(item.kind === next.kind && item.id === next.id)) : [...items, next];
+        });
+        return;
+      }
     }
     setSelection(next);
     if (next) setFocusToken(0);
@@ -187,9 +213,12 @@ export function App() {
       }
       if (typing || document.querySelector("[role='dialog'], [role='menu']")) return;
       const mod = event.metaKey || event.ctrlKey;
-      if ((event.key === "Delete" || event.key === "Backspace") && selection) {
+      if ((event.key === "Delete" || event.key === "Backspace") && selected.length > 0) {
         event.preventDefault();
         deleteSelection();
+      } else if (mod && !event.shiftKey && event.key.toLowerCase() === "g" && selected.length > 1) {
+        event.preventDefault();
+        groupSelection();
       } else if (mod && event.key.toLowerCase() === "z") {
         event.preventDefault();
         if (event.shiftKey) editor.current?.redo();
@@ -201,7 +230,7 @@ export function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [connect, selection, deleteSelection]);
+  }, [connect, selected, deleteSelection, groupSelection]);
 
   const share = async () => {
     const hash = await encodeShareHash(code);
@@ -265,7 +294,7 @@ export function App() {
             diagram={rendered}
             emptyMessage={t.emptyDiagram}
             editable={editable}
-            selection={selection}
+            selected={selected}
             connectSource={connect?.source ?? null}
             connecting={connect !== null}
             fitToken={fitToken}
@@ -318,6 +347,7 @@ export function App() {
             flow={flow}
             pie={pie}
             selection={selection}
+            selected={selected}
             hasError={error !== null}
             focusToken={focusToken}
             onFlowChange={commitFlow}

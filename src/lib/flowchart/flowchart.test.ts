@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import type { FlowModel } from "./model";
-import { addEdge, addNode, duplicateNode, removeEdge, removeNode, reverseEdge, ungroup, updateNode } from "./ops";
+import { addEdge, addNode, duplicateNode, groupItems, removeEdge, removeNode, reverseEdge, ungroup, updateNode } from "./ops";
 import { linkToken, serializeFlowchart } from "./serialize";
 import { getStyleProp, setStyleProp, toHexColor } from "./styles";
 
@@ -130,6 +130,74 @@ describe("operations", () => {
     const next = ungroup(model, "inner");
     expect(next.groups).toEqual([{ id: "outer", title: "o", children: ["A"], classes: [] }]);
     expect(ungroup(next, "outer").edges.map((e) => e.to)).toEqual(["B"]);
+  });
+});
+
+describe("groupItems", () => {
+  const three = (): FlowModel => ({ ...addNode(base(), { label: "C" }).model });
+
+  test("wraps nodes in a new top-level group", () => {
+    const { model, id } = groupItems(three(), ["A", "B"], "Pair");
+    expect(id).toBe("G1");
+    expect(model.groups).toEqual([{ id: "G1", title: "Pair", children: ["A", "B"], classes: [] }]);
+    expect(serializeFlowchart(model)).toContain('subgraph G1["Pair"]\n        A\n        B\n    end');
+  });
+
+  test("ignores unknown ids and returns null when nothing is left", () => {
+    const model = three();
+    expect(groupItems(model, ["nope"], "x")).toEqual({ model, id: null });
+    expect(groupItems(model, [], "x").id).toBeNull();
+  });
+
+  test("creates the group inside a shared parent, at the position of the first item", () => {
+    const start: FlowModel = { ...three(), groups: [{ id: "P", title: "P", children: ["A", "B", "C"], classes: [] }] };
+    const { model, id } = groupItems(start, ["B", "C"], "Inner");
+    expect(model.groups.find((g) => g.id === "P")!.children).toEqual(["A", id!]);
+    expect(model.groups.find((g) => g.id === id)!.children).toEqual(["B", "C"]);
+  });
+
+  test("moves items out of different parents into a top-level group", () => {
+    const start: FlowModel = {
+      ...three(),
+      groups: [
+        { id: "P", title: "P", children: ["A"], classes: [] },
+        { id: "Q", title: "Q", children: ["B"], classes: [] },
+      ],
+    };
+    const { model, id } = groupItems(start, ["A", "B"], "Both");
+    expect(model.groups.map((g) => [g.id, g.children])).toEqual([[id!, ["A", "B"]]]);
+  });
+
+  test("keeps a group that still has other children, and removes arrows to a pruned group", () => {
+    const start: FlowModel = {
+      ...three(),
+      edges: [...base().edges, { id: "", from: "C", to: "Q", label: "", stroke: "normal", head: "arrow", tail: "none", length: 1, styles: [] }],
+      groups: [
+        { id: "P", title: "P", children: ["A", "C"], classes: [] },
+        { id: "Q", title: "Q", children: ["B"], classes: [] },
+      ],
+    };
+    const { model, id } = groupItems(start, ["A", "B"], "Both");
+    expect(model.groups.map((g) => [g.id, g.children])).toEqual([["P", ["C"]], [id!, ["A", "B"]]]);
+    expect(model.edges.map((e) => e.to)).toEqual(["B"]);
+  });
+
+  test("groups an existing group and skips its children", () => {
+    const start: FlowModel = { ...three(), groups: [{ id: "P", title: "P", children: ["A"], classes: [] }] };
+    const { model, id } = groupItems(start, ["A", "P", "C"], "All");
+    expect(model.groups.find((g) => g.id === id)!.children).toEqual(["P", "C"]);
+    expect(model.groups.find((g) => g.id === "P")!.children).toEqual(["A"]);
+  });
+
+  test("new group id does not clash with existing ids", () => {
+    const start: FlowModel = { ...three(), groups: [{ id: "G1", title: "old", children: ["C"], classes: [] }] };
+    expect(groupItems(start, ["A"], "x").id).toBe("G2");
+  });
+
+  test("ungroup undoes groupItems", () => {
+    const start = three();
+    const { model, id } = groupItems(start, ["A", "B"], "Pair");
+    expect(ungroup(model, id!).groups).toEqual([]);
   });
 });
 

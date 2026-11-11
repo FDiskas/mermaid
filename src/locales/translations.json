@@ -544,12 +544,12 @@
     "ru": "Нажмите на целевой узел"
   },
   "selectHint": {
-    "en": "Click a node, an arrow or a group in the preview to edit it. Double-click to rename.",
-    "lt": "Spustelėkite mazgą, rodyklę ar grupę peržiūroje, kad redaguotumėte. Dukart spustelėkite, kad pervadintumėte.",
-    "es": "Haz clic en un nodo, una flecha o un grupo en la vista previa para editarlo. Haz doble clic para cambiar el nombre.",
-    "fr": "Cliquez sur un nœud, une flèche ou un groupe dans l'aperçu pour le modifier. Double-cliquez pour renommer.",
-    "de": "Klicke in der Vorschau auf einen Knoten, einen Pfeil oder eine Gruppe, um ihn zu bearbeiten. Doppelklick zum Umbenennen.",
-    "ru": "Нажмите на узел, стрелку или группу в предпросмотре, чтобы изменить её. Двойной щелчок — переименовать."
+    "en": "Click a node, an arrow or a group in the preview to edit it. Double-click to rename. Shift-click to select several nodes and group them.",
+    "lt": "Spustelėkite mazgą, rodyklę ar grupę peržiūroje, kad redaguotumėte. Dukart spustelėkite, kad pervadintumėte. Spustelėkite su Shift, kad pasirinktumėte kelis mazgus ir juos sugrupuotumėte.",
+    "es": "Haz clic en un nodo, una flecha o un grupo en la vista previa para editarlo. Haz doble clic para cambiar el nombre. Haz clic con Shift para seleccionar varios nodos y agruparlos.",
+    "fr": "Cliquez sur un nœud, une flèche ou un groupe dans l'aperçu pour le modifier. Double-cliquez pour renommer. Cliquez avec Maj pour sélectionner plusieurs nœuds et les grouper.",
+    "de": "Klicke in der Vorschau auf einen Knoten, einen Pfeil oder eine Gruppe, um ihn zu bearbeiten. Doppelklick zum Umbenennen. Mit Umschalt-Klick wählst du mehrere Knoten aus und gruppierst sie.",
+    "ru": "Нажмите на узел, стрелку или группу в предпросмотре, чтобы изменить её. Двойной щелчок — переименовать. Shift+щелчок выбирает несколько узлов, чтобы объединить их в группу."
   },
   "nodeLabel": {
     "en": "Label",
@@ -1050,5 +1050,55 @@
       "one": "Стрелок: {count}",
       "other": "Стрелок: {count}"
     }
+  },
+  "groupSelected": {
+    "en": "Group",
+    "lt": "Sugrupuoti",
+    "es": "Agrupar",
+    "fr": "Grouper",
+    "de": "Gruppieren",
+    "ru": "Сгруппировать"
+  },
+  "newGroupTitle": {
+    "en": "New group",
+    "lt": "Nauja grupė",
+    "es": "Nuevo grupo",
+    "fr": "Nouveau groupe",
+    "de": "Neue Gruppe",
+    "ru": "Новая группа"
+  },
+  "selectedCount": {
+    "en": {
+      "one": "{count} item selected",
+      "other": "{count} items selected"
+    },
+    "lt": {
+      "one": "Pasirinktas {count} elementas",
+      "other": "Pasirinkta elementų: {count}"
+    },
+    "es": {
+      "one": "{count} elemento seleccionado",
+      "other": "{count} elementos seleccionados"
+    },
+    "fr": {
+      "one": "{count} élément sélectionné",
+      "other": "{count} éléments sélectionnés"
+    },
+    "de": {
+      "one": "{count} Element ausgewählt",
+      "other": "{count} Elemente ausgewählt"
+    },
+    "ru": {
+      "one": "Выбран {count} элемент",
+      "other": "Выбрано элементов: {count}"
+    }
+  },
+  "multiSelectHint": {
+    "en": "Group the selected nodes into one box. Shift-click more nodes or groups to add or remove them.",
+    "lt": "Sugrupuokite pasirinktus mazgus į vieną rėmelį. Spustelėkite su Shift, kad pridėtumėte ar pašalintumėte mazgus ar grupes.",
+    "es": "Agrupa los nodos seleccionados en un recuadro. Haz clic con Shift en más nodos o grupos para añadirlos o quitarlos.",
+    "fr": "Regroupez les nœuds sélectionnés dans un cadre. Cliquez avec Maj sur d'autres nœuds ou groupes pour les ajouter ou les retirer.",
+    "de": "Fasse die ausgewählten Knoten in einem Kasten zusammen. Mit Umschalt-Klick auf weitere Knoten oder Gruppen fügst du sie hinzu oder entfernst sie.",
+    "ru": "Объедините выбранные узлы в одну рамку. Щёлкните с Shift по другим узлам или группам, чтобы добавить или убрать их."
   }
 }
