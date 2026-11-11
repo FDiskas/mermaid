@@ -487,6 +487,14 @@
     "de": "Ein kostenloser Mermaid-Editor, der komplett in deinem Browser läuft. Deine Diagramme werden lokal gespeichert und nie auf einen Server hochgeladen. Bearbeite den Code oder das Diagramm visuell und exportiere es als PNG oder SVG.",
     "ru": "Бесплатный редактор Mermaid, который работает целиком в вашем браузере. Диаграммы хранятся локально и никогда не загружаются на сервер. Редактируйте код или саму диаграмму визуально, затем экспортируйте в PNG или SVG."
   },
+  "aboutSourceCode": {
+    "en": "Source code on GitHub",
+    "lt": "Šaltinio kodas GitHub",
+    "es": "Código fuente en GitHub",
+    "fr": "Code source sur GitHub",
+    "de": "Quellcode auf GitHub",
+    "ru": "Исходный код на GitHub"
+  },
   "visualEditor": {
     "en": "Visual editor",
     "lt": "Vizualinis redaktorius",
