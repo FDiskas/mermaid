@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "skills": {
+    "auto-memory": {
+      "source": "FDiskas/auto-memory",
+      "sourceType": "github",
+      "skillPath": "skills/auto-memory/SKILL.md",
+      "computedHash": "033aaf61f8fdd55565c272479118549a3f2458c6a35e0b7b4567011f6179d2bc"
+    },
+    "solid": {
+      "source": "ramziddin/solid-skills",
+      "sourceType": "github",
+      "skillPath": "skills/solid/SKILL.md",
+      "computedHash": "4a67af4421f6e0b5461d1255ddd9eba68275f5b6c91fb92b826c015031a7d5cc"
+    }
+  }
+}
