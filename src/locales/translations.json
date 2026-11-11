@@ -1,0 +1,1046 @@
+{
+  "appName": {
+    "en": "Mermaid Drawing",
+    "lt": "Mermaid Drawing",
+    "es": "Mermaid Drawing",
+    "fr": "Mermaid Drawing",
+    "de": "Mermaid Drawing",
+    "ru": "Mermaid Drawing"
+  },
+  "appTagline": {
+    "en": "Free online Mermaid editor",
+    "lt": "Nemokamas Mermaid redaktorius internete",
+    "es": "Editor de Mermaid gratuito en línea",
+    "fr": "Éditeur Mermaid en ligne gratuit",
+    "de": "Kostenloser Online-Mermaid-Editor",
+    "ru": "Бесплатный онлайн-редактор Mermaid"
+  },
+  "codeEditor": {
+    "en": "Mermaid Code Editor",
+    "lt": "Mermaid kodo redaktorius",
+    "es": "Editor de código Mermaid",
+    "fr": "Éditeur de code Mermaid",
+    "de": "Mermaid-Code-Editor",
+    "ru": "Редактор кода Mermaid"
+  },
+  "history": {
+    "en": "History",
+    "lt": "Istorija",
+    "es": "Historial",
+    "fr": "Historique",
+    "de": "Verlauf",
+    "ru": "История"
+  },
+  "documentation": {
+    "en": "Mermaid Documentation",
+    "lt": "Mermaid dokumentacija",
+    "es": "Documentación de Mermaid",
+    "fr": "Documentation Mermaid",
+    "de": "Mermaid-Dokumentation",
+    "ru": "Документация Mermaid"
+  },
+  "preview": {
+    "en": "Mermaid Drawing Preview",
+    "lt": "Mermaid brėžinio peržiūra",
+    "es": "Vista previa del dibujo",
+    "fr": "Aperçu du dessin",
+    "de": "Zeichnungsvorschau",
+    "ru": "Предпросмотр рисунка"
+  },
+  "clear": {
+    "en": "Clear",
+    "lt": "Išvalyti",
+    "es": "Borrar",
+    "fr": "Effacer",
+    "de": "Leeren",
+    "ru": "Очистить"
+  },
+  "about": {
+    "en": "About",
+    "lt": "Apie",
+    "es": "Acerca de",
+    "fr": "À propos",
+    "de": "Über",
+    "ru": "О проекте"
+  },
+  "undo": {
+    "en": "Undo",
+    "lt": "Atšaukti",
+    "es": "Deshacer",
+    "fr": "Annuler",
+    "de": "Rückgängig",
+    "ru": "Отменить"
+  },
+  "redo": {
+    "en": "Redo",
+    "lt": "Perdaryti",
+    "es": "Rehacer",
+    "fr": "Rétablir",
+    "de": "Wiederholen",
+    "ru": "Повторить"
+  },
+  "toggleTheme": {
+    "en": "Toggle theme",
+    "lt": "Keisti temą",
+    "es": "Cambiar tema",
+    "fr": "Changer de thème",
+    "de": "Design wechseln",
+    "ru": "Сменить тему"
+  },
+  "language": {
+    "en": "Language",
+    "lt": "Kalba",
+    "es": "Idioma",
+    "fr": "Langue",
+    "de": "Sprache",
+    "ru": "Язык"
+  },
+  "languageName": {
+    "en": "English",
+    "lt": "Lietuvių",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch",
+    "ru": "Русский"
+  },
+  "templates": {
+    "en": "Templates",
+    "lt": "Šablonai",
+    "es": "Plantillas",
+    "fr": "Modèles",
+    "de": "Vorlagen",
+    "ru": "Шаблоны"
+  },
+  "savedLocally": {
+    "en": "Saved in this browser",
+    "lt": "Išsaugota šioje naršyklėje",
+    "es": "Guardado en este navegador",
+    "fr": "Enregistré dans ce navigateur",
+    "de": "In diesem Browser gespeichert",
+    "ru": "Сохранено в этом браузере"
+  },
+  "codeTab": {
+    "en": "Code",
+    "lt": "Kodas",
+    "es": "Código",
+    "fr": "Code",
+    "de": "Code",
+    "ru": "Код"
+  },
+  "previewTab": {
+    "en": "Preview",
+    "lt": "Peržiūra",
+    "es": "Vista previa",
+    "fr": "Aperçu",
+    "de": "Vorschau",
+    "ru": "Просмотр"
+  },
+  "typeFlowchart": {
+    "en": "Flowchart",
+    "lt": "Srautų diagrama",
+    "es": "Diagrama de flujo",
+    "fr": "Organigramme",
+    "de": "Flussdiagramm",
+    "ru": "Блок-схема"
+  },
+  "typeSequence": {
+    "en": "Sequence Diagram",
+    "lt": "Sekos diagrama",
+    "es": "Diagrama de secuencia",
+    "fr": "Diagramme de séquence",
+    "de": "Sequenzdiagramm",
+    "ru": "Диаграмма последовательности"
+  },
+  "typeClass": {
+    "en": "Class Diagram",
+    "lt": "Klasių diagrama",
+    "es": "Diagrama de clases",
+    "fr": "Diagramme de classes",
+    "de": "Klassendiagramm",
+    "ru": "Диаграмма классов"
+  },
+  "typeState": {
+    "en": "State Diagram",
+    "lt": "Būsenų diagrama",
+    "es": "Diagrama de estados",
+    "fr": "Diagramme d'états",
+    "de": "Zustandsdiagramm",
+    "ru": "Диаграмма состояний"
+  },
+  "typeEr": {
+    "en": "ER Diagram",
+    "lt": "ER diagrama",
+    "es": "Diagrama ER",
+    "fr": "Diagramme ER",
+    "de": "ER-Diagramm",
+    "ru": "ER-диаграмма"
+  },
+  "typeGantt": {
+    "en": "Gantt Chart",
+    "lt": "Ganto diagrama",
+    "es": "Diagrama de Gantt",
+    "fr": "Diagramme de Gantt",
+    "de": "Gantt-Diagramm",
+    "ru": "Диаграмма Ганта"
+  },
+  "typePie": {
+    "en": "Pie Chart",
+    "lt": "Skritulinė diagrama",
+    "es": "Gráfico circular",
+    "fr": "Camembert",
+    "de": "Kreisdiagramm",
+    "ru": "Круговая диаграмма"
+  },
+  "typeJourney": {
+    "en": "User Journey",
+    "lt": "Vartotojo kelionė",
+    "es": "Recorrido del usuario",
+    "fr": "Parcours utilisateur",
+    "de": "User Journey",
+    "ru": "Путь пользователя"
+  },
+  "typeGit": {
+    "en": "Git Graph",
+    "lt": "Git grafas",
+    "es": "Gráfico de Git",
+    "fr": "Graphe Git",
+    "de": "Git-Graph",
+    "ru": "Git-граф"
+  },
+  "typeMindmap": {
+    "en": "Mind Map",
+    "lt": "Minčių žemėlapis",
+    "es": "Mapa mental",
+    "fr": "Carte mentale",
+    "de": "Mindmap",
+    "ru": "Ментальная карта"
+  },
+  "typeTimeline": {
+    "en": "Timeline",
+    "lt": "Laiko juosta",
+    "es": "Cronología",
+    "fr": "Chronologie",
+    "de": "Zeitleiste",
+    "ru": "Хронология"
+  },
+  "typeQuadrant": {
+    "en": "Quadrant Chart",
+    "lt": "Kvadrantų diagrama",
+    "es": "Gráfico de cuadrantes",
+    "fr": "Diagramme en quadrants",
+    "de": "Quadrantendiagramm",
+    "ru": "Квадрантная диаграмма"
+  },
+  "typeOther": {
+    "en": "Diagram",
+    "lt": "Diagrama",
+    "es": "Diagrama",
+    "fr": "Diagramme",
+    "de": "Diagramm",
+    "ru": "Диаграмма"
+  },
+  "zoomIn": {
+    "en": "Zoom in",
+    "lt": "Priartinti",
+    "es": "Acercar",
+    "fr": "Zoom avant",
+    "de": "Vergrößern",
+    "ru": "Увеличить"
+  },
+  "zoomOut": {
+    "en": "Zoom out",
+    "lt": "Nutolinti",
+    "es": "Alejar",
+    "fr": "Zoom arrière",
+    "de": "Verkleinern",
+    "ru": "Уменьшить"
+  },
+  "zoomFit": {
+    "en": "Fit to screen",
+    "lt": "Pritaikyti prie ekrano",
+    "es": "Ajustar a la pantalla",
+    "fr": "Ajuster à l'écran",
+    "de": "An Bildschirm anpassen",
+    "ru": "По размеру экрана"
+  },
+  "fullscreen": {
+    "en": "Fullscreen",
+    "lt": "Visas ekranas",
+    "es": "Pantalla completa",
+    "fr": "Plein écran",
+    "de": "Vollbild",
+    "ru": "Во весь экран"
+  },
+  "share": {
+    "en": "Share",
+    "lt": "Dalintis",
+    "es": "Compartir",
+    "fr": "Partager",
+    "de": "Teilen",
+    "ru": "Поделиться"
+  },
+  "linkCopied": {
+    "en": "Link copied",
+    "lt": "Nuoroda nukopijuota",
+    "es": "Enlace copiado",
+    "fr": "Lien copié",
+    "de": "Link kopiert",
+    "ru": "Ссылка скопирована"
+  },
+  "exportDrawing": {
+    "en": "Export Drawing",
+    "lt": "Eksportuoti brėžinį",
+    "es": "Exportar dibujo",
+    "fr": "Exporter le dessin",
+    "de": "Zeichnung exportieren",
+    "ru": "Экспорт рисунка"
+  },
+  "exportPng": {
+    "en": "Export Drawing as PNG",
+    "lt": "Eksportuoti kaip PNG",
+    "es": "Exportar dibujo como PNG",
+    "fr": "Exporter en PNG",
+    "de": "Als PNG exportieren",
+    "ru": "Экспорт в PNG"
+  },
+  "exportSvg": {
+    "en": "Export Drawing as SVG",
+    "lt": "Eksportuoti kaip SVG",
+    "es": "Exportar dibujo como SVG",
+    "fr": "Exporter en SVG",
+    "de": "Als SVG exportieren",
+    "ru": "Экспорт в SVG"
+  },
+  "copyImage": {
+    "en": "Copy image",
+    "lt": "Kopijuoti vaizdą",
+    "es": "Copiar imagen",
+    "fr": "Copier l'image",
+    "de": "Bild kopieren",
+    "ru": "Копировать изображение"
+  },
+  "copied": {
+    "en": "Copied",
+    "lt": "Nukopijuota",
+    "es": "Copiado",
+    "fr": "Copié",
+    "de": "Kopiert",
+    "ru": "Скопировано"
+  },
+  "exportScale": {
+    "en": "Scale",
+    "lt": "Mastelis",
+    "es": "Escala",
+    "fr": "Échelle",
+    "de": "Maßstab",
+    "ru": "Масштаб"
+  },
+  "transparentBackground": {
+    "en": "Transparent background",
+    "lt": "Permatomas fonas",
+    "es": "Fondo transparente",
+    "fr": "Arrière-plan transparent",
+    "de": "Transparenter Hintergrund",
+    "ru": "Прозрачный фон"
+  },
+  "exportFailed": {
+    "en": "Export failed",
+    "lt": "Eksportuoti nepavyko",
+    "es": "Error al exportar",
+    "fr": "Échec de l'exportation",
+    "de": "Export fehlgeschlagen",
+    "ru": "Не удалось экспортировать"
+  },
+  "diagramTheme": {
+    "en": "Diagram theme",
+    "lt": "Diagramos tema",
+    "es": "Tema del diagrama",
+    "fr": "Thème du diagramme",
+    "de": "Diagramm-Design",
+    "ru": "Тема диаграммы"
+  },
+  "themeAuto": {
+    "en": "Auto",
+    "lt": "Automatinė",
+    "es": "Automático",
+    "fr": "Auto",
+    "de": "Automatisch",
+    "ru": "Авто"
+  },
+  "themeDefault": {
+    "en": "Default",
+    "lt": "Numatytoji",
+    "es": "Predeterminado",
+    "fr": "Par défaut",
+    "de": "Standard",
+    "ru": "По умолчанию"
+  },
+  "themeDark": {
+    "en": "Dark",
+    "lt": "Tamsi",
+    "es": "Oscuro",
+    "fr": "Sombre",
+    "de": "Dunkel",
+    "ru": "Тёмная"
+  },
+  "themeForest": {
+    "en": "Forest",
+    "lt": "Miškas",
+    "es": "Bosque",
+    "fr": "Forêt",
+    "de": "Wald",
+    "ru": "Лес"
+  },
+  "themeNeutral": {
+    "en": "Neutral",
+    "lt": "Neutrali",
+    "es": "Neutro",
+    "fr": "Neutre",
+    "de": "Neutral",
+    "ru": "Нейтральная"
+  },
+  "themeBase": {
+    "en": "Base",
+    "lt": "Bazinė",
+    "es": "Base",
+    "fr": "Base",
+    "de": "Basis",
+    "ru": "Базовая"
+  },
+  "renderError": {
+    "en": "Syntax error",
+    "lt": "Sintaksės klaida",
+    "es": "Error de sintaxis",
+    "fr": "Erreur de syntaxe",
+    "de": "Syntaxfehler",
+    "ru": "Синтаксическая ошибка"
+  },
+  "emptyDiagram": {
+    "en": "Type some Mermaid code to see the diagram.",
+    "lt": "Įveskite Mermaid kodą, kad pamatytumėte diagramą.",
+    "es": "Escribe código Mermaid para ver el diagrama.",
+    "fr": "Saisissez du code Mermaid pour voir le diagramme.",
+    "de": "Gib Mermaid-Code ein, um das Diagramm zu sehen.",
+    "ru": "Введите код Mermaid, чтобы увидеть диаграмму."
+  },
+  "historyTitle": {
+    "en": "Version history",
+    "lt": "Versijų istorija",
+    "es": "Historial de versiones",
+    "fr": "Historique des versions",
+    "de": "Versionsverlauf",
+    "ru": "История версий"
+  },
+  "historyDescription": {
+    "en": "Snapshots are saved automatically in this browser.",
+    "lt": "Momentinės kopijos automatiškai saugomos šioje naršyklėje.",
+    "es": "Las instantáneas se guardan automáticamente en este navegador.",
+    "fr": "Les instantanés sont enregistrés automatiquement dans ce navigateur.",
+    "de": "Snapshots werden automatisch in diesem Browser gespeichert.",
+    "ru": "Снимки автоматически сохраняются в этом браузере."
+  },
+  "historyEmpty": {
+    "en": "No saved versions yet.",
+    "lt": "Dar nėra išsaugotų versijų.",
+    "es": "Aún no hay versiones guardadas.",
+    "fr": "Aucune version enregistrée.",
+    "de": "Noch keine gespeicherten Versionen.",
+    "ru": "Сохранённых версий пока нет."
+  },
+  "restore": {
+    "en": "Restore",
+    "lt": "Atkurti",
+    "es": "Restaurar",
+    "fr": "Restaurer",
+    "de": "Wiederherstellen",
+    "ru": "Восстановить"
+  },
+  "delete": {
+    "en": "Delete",
+    "lt": "Ištrinti",
+    "es": "Eliminar",
+    "fr": "Supprimer",
+    "de": "Löschen",
+    "ru": "Удалить"
+  },
+  "close": {
+    "en": "Close",
+    "lt": "Uždaryti",
+    "es": "Cerrar",
+    "fr": "Fermer",
+    "de": "Schließen",
+    "ru": "Закрыть"
+  },
+  "aboutTitle": {
+    "en": "About Mermaid Drawing",
+    "lt": "Apie Mermaid Drawing",
+    "es": "Acerca de Mermaid Drawing",
+    "fr": "À propos de Mermaid Drawing",
+    "de": "Über Mermaid Drawing",
+    "ru": "О Mermaid Drawing"
+  },
+  "aboutBody": {
+    "en": "A free Mermaid editor that runs entirely in your browser. Your diagrams are stored locally and never uploaded to a server. Edit the code, or edit the diagram visually, then export it as PNG or SVG.",
+    "lt": "Nemokamas Mermaid redaktorius, veikiantis tik jūsų naršyklėje. Diagramos saugomos vietoje ir niekada nesiunčiamos į serverį. Redaguokite kodą arba diagramą vizualiai, tada eksportuokite į PNG ar SVG.",
+    "es": "Un editor de Mermaid gratuito que funciona por completo en tu navegador. Tus diagramas se guardan localmente y nunca se suben a un servidor. Edita el código o el diagrama de forma visual y expórtalo como PNG o SVG.",
+    "fr": "Un éditeur Mermaid gratuit qui fonctionne entièrement dans votre navigateur. Vos diagrammes sont stockés localement et jamais envoyés à un serveur. Modifiez le code ou le diagramme visuellement, puis exportez-le en PNG ou SVG.",
+    "de": "Ein kostenloser Mermaid-Editor, der komplett in deinem Browser läuft. Deine Diagramme werden lokal gespeichert und nie auf einen Server hochgeladen. Bearbeite den Code oder das Diagramm visuell und exportiere es als PNG oder SVG.",
+    "ru": "Бесплатный редактор Mermaid, который работает целиком в вашем браузере. Диаграммы хранятся локально и никогда не загружаются на сервер. Редактируйте код или саму диаграмму визуально, затем экспортируйте в PNG или SVG."
+  },
+  "visualEditor": {
+    "en": "Visual editor",
+    "lt": "Vizualinis redaktorius",
+    "es": "Editor visual",
+    "fr": "Éditeur visuel",
+    "de": "Visueller Editor",
+    "ru": "Визуальный редактор"
+  },
+  "toolSelect": {
+    "en": "Select",
+    "lt": "Pasirinkti",
+    "es": "Seleccionar",
+    "fr": "Sélectionner",
+    "de": "Auswählen",
+    "ru": "Выбрать"
+  },
+  "addNode": {
+    "en": "Add node",
+    "lt": "Pridėti mazgą",
+    "es": "Añadir nodo",
+    "fr": "Ajouter un nœud",
+    "de": "Knoten hinzufügen",
+    "ru": "Добавить узел"
+  },
+  "connect": {
+    "en": "Connect",
+    "lt": "Sujungti",
+    "es": "Conectar",
+    "fr": "Relier",
+    "de": "Verbinden",
+    "ru": "Соединить"
+  },
+  "connectHintSource": {
+    "en": "Click the node the arrow starts from",
+    "lt": "Spustelėkite mazgą, nuo kurio prasideda rodyklė",
+    "es": "Haz clic en el nodo donde empieza la flecha",
+    "fr": "Cliquez sur le nœud d'où part la flèche",
+    "de": "Klicke auf den Knoten, an dem der Pfeil beginnt",
+    "ru": "Нажмите на узел, из которого выходит стрелка"
+  },
+  "connectHint": {
+    "en": "Click the target node",
+    "lt": "Spustelėkite tikslinį mazgą",
+    "es": "Haz clic en el nodo de destino",
+    "fr": "Cliquez sur le nœud cible",
+    "de": "Klicke auf den Zielknoten",
+    "ru": "Нажмите на целевой узел"
+  },
+  "selectHint": {
+    "en": "Click a node, an arrow or a group in the preview to edit it. Double-click to rename.",
+    "lt": "Spustelėkite mazgą, rodyklę ar grupę peržiūroje, kad redaguotumėte. Dukart spustelėkite, kad pervadintumėte.",
+    "es": "Haz clic en un nodo, una flecha o un grupo en la vista previa para editarlo. Haz doble clic para cambiar el nombre.",
+    "fr": "Cliquez sur un nœud, une flèche ou un groupe dans l'aperçu pour le modifier. Double-cliquez pour renommer.",
+    "de": "Klicke in der Vorschau auf einen Knoten, einen Pfeil oder eine Gruppe, um ihn zu bearbeiten. Doppelklick zum Umbenennen.",
+    "ru": "Нажмите на узел, стрелку или группу в предпросмотре, чтобы изменить её. Двойной щелчок — переименовать."
+  },
+  "nodeLabel": {
+    "en": "Label",
+    "lt": "Pavadinimas",
+    "es": "Etiqueta",
+    "fr": "Libellé",
+    "de": "Beschriftung",
+    "ru": "Подпись"
+  },
+  "nodeShape": {
+    "en": "Shape",
+    "lt": "Forma",
+    "es": "Forma",
+    "fr": "Forme",
+    "de": "Form",
+    "ru": "Форма"
+  },
+  "shapeSquare": {
+    "en": "Rectangle",
+    "lt": "Stačiakampis",
+    "es": "Rectángulo",
+    "fr": "Rectangle",
+    "de": "Rechteck",
+    "ru": "Прямоугольник"
+  },
+  "shapeRound": {
+    "en": "Rounded",
+    "lt": "Suapvalintas",
+    "es": "Redondeado",
+    "fr": "Arrondi",
+    "de": "Abgerundet",
+    "ru": "Скруглённый"
+  },
+  "shapeStadium": {
+    "en": "Stadium",
+    "lt": "Stadionas",
+    "es": "Estadio",
+    "fr": "Stade",
+    "de": "Stadion",
+    "ru": "Стадион"
+  },
+  "shapeSubroutine": {
+    "en": "Subroutine",
+    "lt": "Paprogramė",
+    "es": "Subrutina",
+    "fr": "Sous-routine",
+    "de": "Unterprogramm",
+    "ru": "Подпрограмма"
+  },
+  "shapeCylinder": {
+    "en": "Database",
+    "lt": "Duomenų bazė",
+    "es": "Base de datos",
+    "fr": "Base de données",
+    "de": "Datenbank",
+    "ru": "База данных"
+  },
+  "shapeCircle": {
+    "en": "Circle",
+    "lt": "Apskritimas",
+    "es": "Círculo",
+    "fr": "Cercle",
+    "de": "Kreis",
+    "ru": "Круг"
+  },
+  "shapeDoubleCircle": {
+    "en": "Double circle",
+    "lt": "Dvigubas apskritimas",
+    "es": "Doble círculo",
+    "fr": "Double cercle",
+    "de": "Doppelkreis",
+    "ru": "Двойной круг"
+  },
+  "shapeDiamond": {
+    "en": "Decision",
+    "lt": "Sprendimas",
+    "es": "Decisión",
+    "fr": "Décision",
+    "de": "Entscheidung",
+    "ru": "Решение"
+  },
+  "shapeHexagon": {
+    "en": "Hexagon",
+    "lt": "Šešiakampis",
+    "es": "Hexágono",
+    "fr": "Hexagone",
+    "de": "Sechseck",
+    "ru": "Шестиугольник"
+  },
+  "shapeOdd": {
+    "en": "Flag",
+    "lt": "Vėliavėlė",
+    "es": "Bandera",
+    "fr": "Fanion",
+    "de": "Fahne",
+    "ru": "Флажок"
+  },
+  "shapeTrapezoid": {
+    "en": "Trapezoid",
+    "lt": "Trapecija",
+    "es": "Trapecio",
+    "fr": "Trapèze",
+    "de": "Trapez",
+    "ru": "Трапеция"
+  },
+  "shapeTrapezoidInv": {
+    "en": "Inverted trapezoid",
+    "lt": "Apversta trapecija",
+    "es": "Trapecio invertido",
+    "fr": "Trapèze inversé",
+    "de": "Umgekehrtes Trapez",
+    "ru": "Перевёрнутая трапеция"
+  },
+  "shapeParallelogram": {
+    "en": "Parallelogram",
+    "lt": "Lygiagretainis",
+    "es": "Paralelogramo",
+    "fr": "Parallélogramme",
+    "de": "Parallelogramm",
+    "ru": "Параллелограмм"
+  },
+  "shapeParallelogramAlt": {
+    "en": "Parallelogram (alt)",
+    "lt": "Lygiagretainis (kitas)",
+    "es": "Paralelogramo (alt.)",
+    "fr": "Parallélogramme (alt.)",
+    "de": "Parallelogramm (alt.)",
+    "ru": "Параллелограмм (альт.)"
+  },
+  "shapeCustom": {
+    "en": "Custom",
+    "lt": "Individuali",
+    "es": "Personalizada",
+    "fr": "Personnalisée",
+    "de": "Benutzerdefiniert",
+    "ru": "Особая"
+  },
+  "fillColor": {
+    "en": "Fill",
+    "lt": "Užpildas",
+    "es": "Relleno",
+    "fr": "Remplissage",
+    "de": "Füllung",
+    "ru": "Заливка"
+  },
+  "strokeColor": {
+    "en": "Border",
+    "lt": "Rėmelis",
+    "es": "Borde",
+    "fr": "Bordure",
+    "de": "Rand",
+    "ru": "Контур"
+  },
+  "textColor": {
+    "en": "Text",
+    "lt": "Tekstas",
+    "es": "Texto",
+    "fr": "Texte",
+    "de": "Text",
+    "ru": "Текст"
+  },
+  "strokeWidth": {
+    "en": "Border width",
+    "lt": "Rėmelio storis",
+    "es": "Grosor del borde",
+    "fr": "Épaisseur de bordure",
+    "de": "Randstärke",
+    "ru": "Толщина контура"
+  },
+  "resetStyle": {
+    "en": "Reset style",
+    "lt": "Atstatyti stilių",
+    "es": "Restablecer estilo",
+    "fr": "Réinitialiser le style",
+    "de": "Stil zurücksetzen",
+    "ru": "Сбросить стиль"
+  },
+  "addConnected": {
+    "en": "Add connected node",
+    "lt": "Pridėti sujungtą mazgą",
+    "es": "Añadir nodo conectado",
+    "fr": "Ajouter un nœud relié",
+    "de": "Verbundenen Knoten hinzufügen",
+    "ru": "Добавить связанный узел"
+  },
+  "connectTo": {
+    "en": "Connect to…",
+    "lt": "Sujungti su…",
+    "es": "Conectar con…",
+    "fr": "Relier à…",
+    "de": "Verbinden mit…",
+    "ru": "Соединить с…"
+  },
+  "duplicate": {
+    "en": "Duplicate",
+    "lt": "Dubliuoti",
+    "es": "Duplicar",
+    "fr": "Dupliquer",
+    "de": "Duplizieren",
+    "ru": "Дублировать"
+  },
+  "edgeLabel": {
+    "en": "Arrow label",
+    "lt": "Rodyklės pavadinimas",
+    "es": "Etiqueta de flecha",
+    "fr": "Libellé de la flèche",
+    "de": "Pfeilbeschriftung",
+    "ru": "Подпись стрелки"
+  },
+  "lineStyle": {
+    "en": "Line",
+    "lt": "Linija",
+    "es": "Línea",
+    "fr": "Ligne",
+    "de": "Linie",
+    "ru": "Линия"
+  },
+  "lineSolid": {
+    "en": "Solid",
+    "lt": "Ištisinė",
+    "es": "Continua",
+    "fr": "Continue",
+    "de": "Durchgezogen",
+    "ru": "Сплошная"
+  },
+  "lineDotted": {
+    "en": "Dotted",
+    "lt": "Punktyrinė",
+    "es": "Punteada",
+    "fr": "Pointillée",
+    "de": "Gepunktet",
+    "ru": "Пунктирная"
+  },
+  "lineThick": {
+    "en": "Thick",
+    "lt": "Stora",
+    "es": "Gruesa",
+    "fr": "Épaisse",
+    "de": "Dick",
+    "ru": "Толстая"
+  },
+  "arrowHead": {
+    "en": "Arrow end",
+    "lt": "Rodyklės galas",
+    "es": "Extremo de flecha",
+    "fr": "Extrémité de flèche",
+    "de": "Pfeilende",
+    "ru": "Конец стрелки"
+  },
+  "arrowNormal": {
+    "en": "Arrow",
+    "lt": "Rodyklė",
+    "es": "Flecha",
+    "fr": "Flèche",
+    "de": "Pfeil",
+    "ru": "Стрелка"
+  },
+  "arrowOpen": {
+    "en": "None",
+    "lt": "Nėra",
+    "es": "Ninguno",
+    "fr": "Aucun",
+    "de": "Keiner",
+    "ru": "Нет"
+  },
+  "arrowCross": {
+    "en": "Cross",
+    "lt": "Kryžiukas",
+    "es": "Cruz",
+    "fr": "Croix",
+    "de": "Kreuz",
+    "ru": "Крест"
+  },
+  "arrowCircle": {
+    "en": "Circle",
+    "lt": "Apskritimas",
+    "es": "Círculo",
+    "fr": "Cercle",
+    "de": "Kreis",
+    "ru": "Круг"
+  },
+  "bothDirections": {
+    "en": "Arrows on both ends",
+    "lt": "Rodyklės abiejuose galuose",
+    "es": "Flechas en ambos extremos",
+    "fr": "Flèches aux deux extrémités",
+    "de": "Pfeile an beiden Enden",
+    "ru": "Стрелки с обеих сторон"
+  },
+  "reverseEdge": {
+    "en": "Reverse direction",
+    "lt": "Apversti kryptį",
+    "es": "Invertir dirección",
+    "fr": "Inverser le sens",
+    "de": "Richtung umkehren",
+    "ru": "Обратить направление"
+  },
+  "direction": {
+    "en": "Direction",
+    "lt": "Kryptis",
+    "es": "Dirección",
+    "fr": "Direction",
+    "de": "Richtung",
+    "ru": "Направление"
+  },
+  "dirTB": {
+    "en": "Top to bottom",
+    "lt": "Iš viršaus į apačią",
+    "es": "De arriba abajo",
+    "fr": "Haut vers bas",
+    "de": "Oben nach unten",
+    "ru": "Сверху вниз"
+  },
+  "dirLR": {
+    "en": "Left to right",
+    "lt": "Iš kairės į dešinę",
+    "es": "De izquierda a derecha",
+    "fr": "Gauche à droite",
+    "de": "Links nach rechts",
+    "ru": "Слева направо"
+  },
+  "dirBT": {
+    "en": "Bottom to top",
+    "lt": "Iš apačios į viršų",
+    "es": "De abajo arriba",
+    "fr": "Bas vers haut",
+    "de": "Unten nach oben",
+    "ru": "Снизу вверх"
+  },
+  "dirRL": {
+    "en": "Right to left",
+    "lt": "Iš dešinės į kairę",
+    "es": "De derecha a izquierda",
+    "fr": "Droite à gauche",
+    "de": "Rechts nach links",
+    "ru": "Справа налево"
+  },
+  "groupTitle": {
+    "en": "Group title",
+    "lt": "Grupės pavadinimas",
+    "es": "Título del grupo",
+    "fr": "Titre du groupe",
+    "de": "Gruppentitel",
+    "ru": "Название группы"
+  },
+  "ungroup": {
+    "en": "Ungroup",
+    "lt": "Išskaidyti grupę",
+    "es": "Desagrupar",
+    "fr": "Dégrouper",
+    "de": "Gruppierung aufheben",
+    "ru": "Разгруппировать"
+  },
+  "kindNode": {
+    "en": "Node",
+    "lt": "Mazgas",
+    "es": "Nodo",
+    "fr": "Nœud",
+    "de": "Knoten",
+    "ru": "Узел"
+  },
+  "kindEdge": {
+    "en": "Arrow",
+    "lt": "Rodyklė",
+    "es": "Flecha",
+    "fr": "Flèche",
+    "de": "Pfeil",
+    "ru": "Стрелка"
+  },
+  "kindGroup": {
+    "en": "Group",
+    "lt": "Grupė",
+    "es": "Grupo",
+    "fr": "Groupe",
+    "de": "Gruppe",
+    "ru": "Группа"
+  },
+  "newNodeLabel": {
+    "en": "New node",
+    "lt": "Naujas mazgas",
+    "es": "Nuevo nodo",
+    "fr": "Nouveau nœud",
+    "de": "Neuer Knoten",
+    "ru": "Новый узел"
+  },
+  "rewriteWarning": {
+    "en": "Visual edits regenerate the code. Comments are not kept.",
+    "lt": "Vizualiniai pakeitimai iš naujo sugeneruoja kodą. Komentarai nėra išsaugomi.",
+    "es": "Los cambios visuales regeneran el código. Los comentarios no se conservan.",
+    "fr": "Les modifications visuelles régénèrent le code. Les commentaires ne sont pas conservés.",
+    "de": "Visuelle Änderungen erzeugen den Code neu. Kommentare bleiben nicht erhalten.",
+    "ru": "Визуальные правки пересоздают код. Комментарии не сохраняются."
+  },
+  "unsupportedVisual": {
+    "en": "The visual editor supports flowcharts and pie charts. Use the code editor for this diagram type.",
+    "lt": "Vizualinis redaktorius palaiko srautų ir skritulines diagramas. Šiam diagramos tipui naudokite kodo redaktorių.",
+    "es": "El editor visual admite diagramas de flujo y gráficos circulares. Usa el editor de código para este tipo de diagrama.",
+    "fr": "L'éditeur visuel prend en charge les organigrammes et les camemberts. Utilisez l'éditeur de code pour ce type de diagramme.",
+    "de": "Der visuelle Editor unterstützt Flussdiagramme und Kreisdiagramme. Nutze für diesen Diagrammtyp den Code-Editor.",
+    "ru": "Визуальный редактор поддерживает блок-схемы и круговые диаграммы. Для этого типа диаграмм используйте редактор кода."
+  },
+  "fixSyntaxFirst": {
+    "en": "Fix the syntax error to use the visual editor.",
+    "lt": "Ištaisykite sintaksės klaidą, kad galėtumėte naudoti vizualinį redaktorių.",
+    "es": "Corrige el error de sintaxis para usar el editor visual.",
+    "fr": "Corrigez l'erreur de syntaxe pour utiliser l'éditeur visuel.",
+    "de": "Behebe den Syntaxfehler, um den visuellen Editor zu nutzen.",
+    "ru": "Исправьте синтаксическую ошибку, чтобы использовать визуальный редактор."
+  },
+  "pieTitle": {
+    "en": "Chart title",
+    "lt": "Diagramos pavadinimas",
+    "es": "Título del gráfico",
+    "fr": "Titre du graphique",
+    "de": "Diagrammtitel",
+    "ru": "Название диаграммы"
+  },
+  "showData": {
+    "en": "Show values",
+    "lt": "Rodyti reikšmes",
+    "es": "Mostrar valores",
+    "fr": "Afficher les valeurs",
+    "de": "Werte anzeigen",
+    "ru": "Показать значения"
+  },
+  "sliceValue": {
+    "en": "Value",
+    "lt": "Reikšmė",
+    "es": "Valor",
+    "fr": "Valeur",
+    "de": "Wert",
+    "ru": "Значение"
+  },
+  "addSlice": {
+    "en": "Add slice",
+    "lt": "Pridėti dalį",
+    "es": "Añadir porción",
+    "fr": "Ajouter une part",
+    "de": "Segment hinzufügen",
+    "ru": "Добавить сектор"
+  },
+  "slices": {
+    "en": "Slices",
+    "lt": "Dalys",
+    "es": "Porciones",
+    "fr": "Parts",
+    "de": "Segmente",
+    "ru": "Секторы"
+  },
+  "nodesCount": {
+    "en": {
+      "one": "{count} node",
+      "other": "{count} nodes"
+    },
+    "lt": {
+      "one": "Mazgų: {count}",
+      "other": "Mazgų: {count}"
+    },
+    "es": {
+      "one": "{count} nodo",
+      "other": "{count} nodos"
+    },
+    "fr": {
+      "one": "{count} nœud",
+      "other": "{count} nœuds"
+    },
+    "de": {
+      "one": "{count} Knoten",
+      "other": "{count} Knoten"
+    },
+    "ru": {
+      "one": "Узлов: {count}",
+      "other": "Узлов: {count}"
+    }
+  },
+  "edgesCount": {
+    "en": {
+      "one": "{count} arrow",
+      "other": "{count} arrows"
+    },
+    "lt": {
+      "one": "Rodyklių: {count}",
+      "other": "Rodyklių: {count}"
+    },
+    "es": {
+      "one": "{count} flecha",
+      "other": "{count} flechas"
+    },
+    "fr": {
+      "one": "{count} flèche",
+      "other": "{count} flèches"
+    },
+    "de": {
+      "one": "{count} Pfeil",
+      "other": "{count} Pfeile"
+    },
+    "ru": {
+      "one": "Стрелок: {count}",
+      "other": "Стрелок: {count}"
+    }
+  }
+}

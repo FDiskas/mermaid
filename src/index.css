@@ -1,45 +1,61 @@
 @import "../styles/globals.css";
 
 @layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
   :root {
-    @apply font-sans;
+    @apply font-sans antialiased;
   }
-
   body {
-    @apply grid place-items-center min-w-[320px] min-h-screen relative m-0 bg-background text-foreground;
+    @apply m-0 min-w-[320px] overflow-hidden bg-background text-foreground;
   }
 }
 
-/* cool Bun background animation 😎 */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.05;
-  background: url("./logo.svg");
-  background-size: 256px;
-  transform: rotate(-12deg) scale(1.35);
-  animation: slide 30s linear infinite;
-  pointer-events: none;
+/* Dotted canvas behind the diagram, like a drawing board. */
+.canvas-surface {
+  background-color: var(--canvas);
+  background-image: radial-gradient(var(--canvas-dot) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
-@keyframes slide {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 256px 224px;
-  }
+/* ---- Visual editor: selection and hover feedback on the live SVG (never part of exports) ---- */
+.mv-editable g.node,
+.mv-editable g.cluster > rect,
+.mv-editable g.edgeLabel,
+.mv-editable .mv-hit {
+  cursor: pointer;
 }
-
-@keyframes spin {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.mv-hit {
+  stroke: transparent;
+  stroke-width: 16px;
+  fill: none;
+  pointer-events: stroke;
+  marker-end: none;
+  marker-start: none;
+}
+.mv-editable g.node:hover :is(rect, path, polygon, circle, ellipse):not(.background, .arrowMarkerPath),
+.mv-editable path.flowchart-link:has(+ .mv-hit:hover) {
+  filter: drop-shadow(0 0 3px rgb(59 130 246 / 0.7));
+}
+.mv-selected :is(rect, path, polygon, circle, ellipse):not(.background, .arrowMarkerPath, .label *),
+path.mv-selected {
+  stroke: #3b82f6 !important;
+  stroke-width: 3px !important;
+}
+g.cluster.mv-selected > rect {
+  stroke: #3b82f6 !important;
+  stroke-width: 3px !important;
+}
+.mv-connect-source :is(rect, path, polygon, circle, ellipse):not(.background, .arrowMarkerPath, .label *) {
+  stroke: #10b981 !important;
+  stroke-width: 3px !important;
+}
+.mv-connecting g.node:hover :is(rect, path, polygon, circle, ellipse):not(.background, .arrowMarkerPath, .label *) {
+  stroke: #10b981 !important;
+  stroke-width: 3px !important;
 }
 
 @media (prefers-reduced-motion) {
@@ -47,5 +63,6 @@ body::before {
   ::before,
   ::after {
     animation: none !important;
+    transition: none !important;
   }
 }
