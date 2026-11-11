@@ -13,6 +13,10 @@ Default to using Bun instead of Node.js.
 
 Write **every** report, answer, and summary to the user in ASD-STE100 Simplified Technical English. This applies on **every interaction**, not on request. It controls chat output only — never code, comments, or commit messages.
 
+## Boy Scout skill (always follow)
+
+Before **every** edit to an existing file, invoke the `boy-scout` skill with the Skill tool. Apply its rules to the code you touch. Do this on every task, even for small changes.
+
 ## Memory protocol (always follow)
 
 This project keeps a persistent knowledge base in `.claude/memory/` (see the `auto-memory` skill at `.claude/skills/auto-memory/SKILL.md`). Use it on **every task**:

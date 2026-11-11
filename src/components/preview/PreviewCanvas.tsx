@@ -1,6 +1,7 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import type { Selection } from "@/lib/flowchart/model";
 import type { RenderedDiagram } from "@/lib/mermaid-runtime";
+import { pinchSample, pinchView, type PinchStart, type View } from "@/lib/pinch-zoom";
 import { addEdgeHitAreas, findTargetElement, labelRectOf, targetFromElement } from "@/lib/svg-targets";
 import { cn } from "@/lib/utils";
 import { InlineLabelEditor } from "./InlineLabelEditor";
@@ -13,10 +14,21 @@ export interface PreviewCanvasHandle {
   elementFor(selection: NonNullable<Selection>): Element | null;
 }
 
-interface View {
+interface Point {
   x: number;
   y: number;
-  k: number;
+}
+
+/** A one-finger (or mouse) pan: where it began and the view at that moment. */
+interface DragStart extends Point {
+  view: View;
+  pointerId: number;
+}
+
+/** A two-finger pinch: the two pointers it follows and the canvas origin read when it began. */
+interface PinchGesture extends PinchStart {
+  pointerIds: [number, number];
+  origin: Point;
 }
 
 interface Props {
@@ -156,27 +168,77 @@ export const PreviewCanvas = forwardRef<PreviewCanvasHandle, Props>(function Pre
     if (connectSource) findTargetElement(root, { kind: "node", id: connectSource })?.classList.add("mv-connect-source");
   }, [diagram, selected, connectSource, editable]);
 
-  const drag = useRef<{ x: number; y: number; view: View; pointerId: number } | null>(null);
+  const drag = useRef<DragStart | null>(null);
+
+  // Fingers (and pens) currently down. A mouse is not tracked here: it cannot pinch, and its release outside
+  // the window is never reported, which would leave a stale entry that turns the next click into a "pinch".
+  const pointers = useRef(new Map<number, Point>());
+  const pinch = useRef<PinchGesture | null>(null);
+
+  /** Starts the gesture that fits the pointers now down: a pinch for two or more, a pan for one, none for zero. */
+  const beginGesture = () => {
+    const box = container.current;
+    const down = [...pointers.current];
+    pinch.current = null;
+    drag.current = null;
+    const [first, second] = down;
+    if (!box || !first) return;
+    if (second) {
+      const [idA, a] = first;
+      const [idB, b] = second;
+      const { left, top } = box.getBoundingClientRect(); // the canvas does not move during a gesture
+      const origin = { x: left, y: top };
+      pinch.current = { ...pinchSample(a, b, origin), view: viewRef.current, pointerIds: [idA, idB], origin };
+      panned.current = true; // a pinch must not end in a click that selects something
+      box.setPointerCapture(idA);
+      box.setPointerCapture(idB);
+    } else {
+      const [pointerId, point] = first;
+      drag.current = { ...point, view: viewRef.current, pointerId };
+    }
+  };
 
   const onPointerDown = (event: ReactPointerEvent) => {
     if (event.button !== 0 || editing) return;
-    panned.current = false;
-    drag.current = { x: event.clientX, y: event.clientY, view: viewRef.current, pointerId: event.pointerId };
+    const point = { x: event.clientX, y: event.clientY };
+    if (event.pointerType === "mouse") {
+      panned.current = false;
+      drag.current = { ...point, view: viewRef.current, pointerId: event.pointerId };
+      return;
+    }
+    pointers.current.set(event.pointerId, point);
+    if (pointers.current.size === 1) panned.current = false;
+    if (!pinch.current) beginGesture(); // a third finger joins nothing: the pinch keeps its two
   };
   const onPointerMove = (event: ReactPointerEvent) => {
-    const start = drag.current;
-    if (!start) return;
-    const dx = event.clientX - start.x;
-    const dy = event.clientY - start.y;
+    if (pointers.current.has(event.pointerId)) pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    const gesture = pinch.current;
+    if (gesture) {
+      const [a, b] = gesture.pointerIds.map((id) => pointers.current.get(id));
+      if (!a || !b || !gesture.pointerIds.includes(event.pointerId)) return;
+      applyView(pinchView(gesture, pinchSample(a, b, gesture.origin), MIN_SCALE, MAX_SCALE));
+      return;
+    }
+
+    const first = drag.current;
+    if (!first || event.pointerId !== first.pointerId) return;
+    const dx = event.clientX - first.x;
+    const dy = event.clientY - first.y;
     if (!panned.current) {
       if (Math.hypot(dx, dy) < PAN_THRESHOLD) return;
       panned.current = true;
-      container.current?.setPointerCapture(start.pointerId);
+      container.current?.setPointerCapture(first.pointerId);
     }
-    applyView({ ...start.view, x: start.view.x + dx, y: start.view.y + dy });
+    applyView({ ...first.view, x: first.view.x + dx, y: first.view.y + dy });
   };
-  const onPointerUp = () => {
-    drag.current = null;
+  const onPointerUp = (event: ReactPointerEvent) => {
+    if (!pointers.current.delete(event.pointerId)) {
+      if (drag.current?.pointerId === event.pointerId) drag.current = null; // the mouse
+      return;
+    }
+    if (pinch.current && !pinch.current.pointerIds.includes(event.pointerId)) return; // the extra finger left
+    beginGesture(); // re-base on the fingers that remain: pinch again, pan, or stop
   };
 
   const onClick = (event: React.MouseEvent) => {

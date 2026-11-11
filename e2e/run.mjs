@@ -421,6 +421,40 @@ if (ONLY === "zoom") {
     assert(!(await page.$("[data-testid=node-inspector]")), "panning must not select");
   });
   await page.context().close();
+
+  await check("two-finger pinch zooms on a touch screen, then one finger pans", async () => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 800 }, hasTouch: true, isMobile: true });
+    await context.addInitScript((code) => localStorage.setItem("mermaid-drawing:code", JSON.stringify(code)), FLOW);
+    const touchPage = await context.newPage();
+    await touchPage.goto(BASE);
+    await touchPage.getByRole("tab").nth(1).click();
+    await touchPage.waitForSelector("[data-testid=diagram]", { state: "visible", timeout: 30000 });
+    await touchPage.waitForTimeout(300);
+    const cdp = await context.newCDPSession(touchPage);
+    const touch = (type, points) => cdp.send("Input.dispatchTouchEvent", { type, touchPoints: points.map(([x, y], id) => ({ x, y, id })) });
+    const view = () =>
+      touchPage.$eval("[data-testid=diagram]", (e) => {
+        const [x, y, k] = /translate\((-?[\d.]+)px, (-?[\d.]+)px\) scale\(([\d.]+)\)/.exec(e.style.transform).slice(1).map(Number);
+        return { x, y, k };
+      });
+    const box = await (await touchPage.$("[data-testid=preview-canvas]")).boundingBox();
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height / 2;
+
+    const before = await view();
+    await touch("touchStart", [[cx - 40, cy], [cx + 40, cy]]);
+    for (let i = 1; i <= 8; i++) await touch("touchMove", [[cx - 40 - i * 10, cy], [cx + 40 + i * 10, cy]]);
+    await touch("touchEnd", []);
+    const zoomed = await view();
+    assert(zoomed.k > before.k * 2, `pinch should zoom in: ${before.k} -> ${zoomed.k}`);
+
+    await touch("touchStart", [[cx, cy]]);
+    for (let i = 1; i <= 5; i++) await touch("touchMove", [[cx + i * 10, cy]]);
+    await touch("touchEnd", []);
+    const panned = await view();
+    assert(panned.x > zoomed.x && panned.k === zoomed.k, "one finger should pan without zooming");
+    await context.close();
+  });
 }
 
 /* ---------- Language, theme, history, share ---------- */
