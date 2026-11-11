@@ -48,3 +48,58 @@ src/lib/export.ts    SVG → PNG / SVG / clipboard
 src/components/      UI (shadcn/ui in components/ui), preview canvas, inspector panels
 e2e/run.mjs          Playwright (playwright-core) browser tests
 ```
+
+## Architecture
+
+The Mermaid code in the editor is the single source of truth. `App` keeps the text and sends it to the renderer.
+A click in the preview becomes a selection. An inspector edit changes the parsed model, and the serializer writes new code back into the editor.
+
+```mermaid
+flowchart TB
+  serve["src/index.ts<br/>Bun.serve"] --> boot["frontend.tsx<br/>I18nProvider + App"]
+  boot --> app{{"App.tsx<br/>Mermaid code = source of truth"}}
+
+  subgraph UI["UI (src/components)"]
+    editor["CodeEditor<br/>CodeMirror 6"]
+    preview["PreviewCanvas<br/>pan, zoom, select"]
+    inspector["Inspector<br/>flowchart and pie panels"]
+    exportMenu["ExportMenu<br/>PNG, SVG, clipboard"]
+    history["HistoryDialog"]
+  end
+
+  subgraph Hooks["State (src/hooks)"]
+    useDiagram["useDiagram"]
+    useFlowModel["useFlowModel"]
+    useSnapshots["useSnapshots"]
+    persist["usePersistentState"]
+  end
+
+  subgraph Lib["Logic (src/lib)"]
+    runtime["mermaid-runtime<br/>render and parse"]
+    flow["flowchart/<br/>parse, ops, serialize"]
+    exporter["export<br/>SVG to PNG"]
+    share["share<br/>URL hash"]
+    storage["storage"]
+  end
+
+  ls[("localStorage")]
+
+  app --> UI
+  app --> Hooks
+  app --> share
+  useDiagram --> runtime
+  useFlowModel --> flow
+  exportMenu --> exporter
+  history --> useSnapshots
+  useSnapshots --> persist --> storage --> ls
+```
+
+Exported image of the same chart. It has a transparent background. GitHub shows the light or the dark version to match your theme.
+Files: `docs/architecture.svg` and `docs/architecture-dark.svg` (PNG copies: [light](docs/architecture.png), [dark](docs/architecture-dark.png)).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-dark.svg">
+  <img alt="Architecture of Mermaid Drawing" src="docs/architecture.svg">
+</picture>
+
+To rebuild the images after you change the chart, run `bun run docs:chart` (needs Google Chrome, like `bun e2e`).

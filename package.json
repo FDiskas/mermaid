@@ -9,7 +9,8 @@
     "build": "bun run build.ts",
     "typecheck": "bun check",
     "test": "bun test src",
-    "e2e": "bun e2e/run.mjs http://localhost:3000/"
+    "e2e": "bun e2e/run.mjs http://localhost:3000/",
+    "docs:chart": "bun scripts/export-readme-chart.ts"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.4",
