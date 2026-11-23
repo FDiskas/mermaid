@@ -17,6 +17,8 @@ interface Props {
   /** All selected elements (more than one after a Shift-click). */
   selected: NonNullable<Selection>[];
   hasError: boolean;
+  /** The width of the panel in pixels on wide screens. */
+  width: number;
   /** The last edit in a panel would have made the diagram invalid, so it was not applied. */
   editRejected: boolean;
   focusToken: number;
@@ -51,7 +53,12 @@ export function Inspector(props: Props) {
   }
 
   return (
-    <aside className="bg-card flex w-72 shrink-0 flex-col border-l max-md:absolute max-md:inset-y-0 max-md:right-0 max-md:z-20 max-md:shadow-xl" data-testid="inspector" aria-label={t.visualEditor}>
+    <aside
+      className="bg-card flex w-72 shrink-0 flex-col border-l max-md:absolute max-md:inset-y-0 max-md:right-0 max-md:z-20 max-md:shadow-xl md:w-(--inspector-width) md:border-l-0"
+      style={{ "--inspector-width": `${props.width}px` } as React.CSSProperties}
+      data-testid="inspector"
+      aria-label={t.visualEditor}
+    >
       <div className="flex h-10 shrink-0 items-center justify-between border-b px-4">
         <h2 className="text-sm font-semibold">{t.visualEditor}</h2>
         <Button variant="ghost" size="icon-sm" onClick={props.onClose} aria-label={t.close} title={t.close}>

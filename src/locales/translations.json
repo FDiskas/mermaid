@@ -23,6 +23,22 @@
     "de": "Mermaid-Code-Editor",
     "ru": "Редактор кода Mermaid"
   },
+  "hideCodeEditor": {
+    "en": "Hide code editor",
+    "lt": "Slėpti kodo redaktorių",
+    "es": "Ocultar editor de código",
+    "fr": "Masquer l'éditeur de code",
+    "de": "Code-Editor ausblenden",
+    "ru": "Скрыть редактор кода"
+  },
+  "showCodeEditor": {
+    "en": "Show code editor",
+    "lt": "Rodyti kodo redaktorių",
+    "es": "Mostrar editor de código",
+    "fr": "Afficher l'éditeur de code",
+    "de": "Code-Editor einblenden",
+    "ru": "Показать редактор кода"
+  },
   "history": {
     "en": "History",
     "lt": "Istorija",

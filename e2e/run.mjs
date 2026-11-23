@@ -11,7 +11,7 @@ const CHROME = process.env.CHROME_PATH ?? "/Applications/Google Chrome.app/Conte
 const OUT = new URL("./out/", import.meta.url).pathname;
 mkdirSync(OUT, { recursive: true });
 
-const BLOCKS = ["flowchart", "pie", "timeline", "diagrams", "line-editors", "templates", "zoom", "app", "mobile"];
+const BLOCKS = ["flowchart", "pie", "timeline", "diagrams", "line-editors", "templates", "zoom", "panels", "app", "mobile"];
 const ONLY = process.env.ONLY;
 if (!ONLY) {
   // A fresh browser per block keeps long runs reliable.
@@ -808,6 +808,55 @@ if (ONLY === "app") {
     await page.click("[data-testid=editor-undo]");
     await waitCode(page, (c) => c.trim() !== "", "undo clear");
   });
+  await page.context().close();
+}
+
+/* ---------- Resizable and collapsible side panels ---------- */
+if (ONLY === "panels") {
+  const widthOf = (page, testId) => page.$eval(`[data-testid=${testId}]`, (e) => e.getBoundingClientRect().width);
+  /** Drag a splitter by `dx` pixels with the mouse. */
+  async function drag(page, testId, dx) {
+    const box = await (await page.$(`[data-testid=${testId}]`)).boundingBox();
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x + dx, y, { steps: 5 });
+    await page.mouse.up();
+  }
+
+  const page = await open({ code: FLOW });
+  await page.waitForSelector("[data-testid=inspector]");
+  await check("the visual editor panel is resized from its left edge", async () => {
+    const before = await widthOf(page, "inspector");
+    await drag(page, "inspector-splitter", -100);
+    const after = await widthOf(page, "inspector");
+    assert(Math.abs(after - (before + 100)) < 3, `width went from ${before} to ${after}`);
+    await drag(page, "inspector-splitter", 2000);
+    assert((await widthOf(page, "inspector")) >= 240, "panel is narrower than its minimum");
+  });
+  await check("the visual editor width persists after reload", async () => {
+    await drag(page, "inspector-splitter", -60);
+    const width = await widthOf(page, "inspector");
+    await page.reload();
+    await page.waitForSelector("[data-testid=inspector]");
+    assert(Math.abs((await widthOf(page, "inspector")) - width) < 2, "width should persist");
+  });
+  await check("the code panel collapses and opens again", async () => {
+    await page.click("[data-testid=code-close]");
+    await page.waitForSelector("[data-testid=splitter]", { state: "detached" });
+    assert(!(await page.isVisible(".cm-editor")), "code editor should be hidden");
+    await page.click("[data-testid=code-open]");
+    await page.waitForSelector(".cm-editor", { state: "visible" });
+    await page.waitForSelector("[data-testid=splitter]");
+  });
+  await check("the visual editor panel collapses and opens again", async () => {
+    await page.click("[data-testid=inspector-toggle]");
+    await page.waitForSelector("[data-testid=inspector-splitter]", { state: "detached" });
+    await page.click("[data-testid=inspector-toggle]");
+    await page.waitForSelector("[data-testid=inspector]");
+  });
+  await page.screenshot({ path: OUT + "09-panels.png" });
   await page.context().close();
 }
 

@@ -1,4 +1,4 @@
-import { BookOpen, Code2, Eye, History, Link2, Maximize2, Minimize2, PanelRight, Redo2, RefreshCw, Undo2, ZoomIn, ZoomOut } from "lucide-react";
+import { BookOpen, Code2, Eye, History, Link2, Maximize2, Minimize2, PanelLeft, PanelLeftClose, PanelRight, Redo2, RefreshCw, Undo2, ZoomIn, ZoomOut } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AboutDialog } from "@/components/AboutDialog";
 import { CodeEditor, type CodeEditorHandle, type CursorPosition } from "@/components/CodeEditor";
@@ -35,6 +35,18 @@ type ThemeChoice = DiagramTheme | "auto";
 const DIAGRAM_THEMES: ThemeChoice[] = ["auto", "default", "dark", "forest", "neutral", "base"];
 const MERMAID_DOCS = "https://mermaid.js.org/intro/";
 
+/** Limits of the code panel, as a fraction of the width of the page. */
+const MIN_SPLIT = 0.2;
+const MAX_SPLIT = 0.7;
+/** Limits of the visual editor panel in pixels. */
+const MIN_INSPECTOR_WIDTH = 240;
+const MAX_INSPECTOR_WIDTH = 640;
+const DEFAULT_INSPECTOR_WIDTH = 288;
+/** The preview must keep at least this width, whatever the size of the visual editor panel. */
+const MIN_PREVIEW_WIDTH = 240;
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
 export function App() {
   const t = useTranslate();
   const [code, setCode] = usePersistentState<string>("code", DEFAULT_CODE);
@@ -44,6 +56,8 @@ export function App() {
   const [transparent, setTransparent] = usePersistentState("export-transparent", false);
   const [split, setSplit] = usePersistentState("split", 0.38);
   const [inspectorOpen, setInspectorOpen] = usePersistentState("inspector-open", window.innerWidth >= 768);
+  const [inspectorWidth, setInspectorWidth] = usePersistentState("inspector-width", DEFAULT_INSPECTOR_WIDTH);
+  const [codeOpen, setCodeOpen] = usePersistentState("code-open", true);
 
   const [mobileTab, setMobileTab] = useState<"code" | "preview">("code");
   const [expanded, setExpanded] = useState(false);
@@ -338,6 +352,11 @@ export function App() {
       data-testid="preview-panel"
     >
       <div className="bg-card flex h-10 shrink-0 items-center gap-1 border-b px-3">
+        {!codeOpen && (
+          <span className="hidden md:inline-flex">
+            <IconButton label={t.showCodeEditor} onClick={() => setCodeOpen(true)} testId="code-open"><PanelLeft /></IconButton>
+          </span>
+        )}
         <h2 className="text-muted-foreground mr-auto truncate text-xs font-medium" data-testid="preview-title">
           {t.preview} ({Math.round(scale * 100)}%)
         </h2>
@@ -423,7 +442,17 @@ export function App() {
           </div>
         </div>
         {inspectorOpen && (
+          <Splitter
+            testId="inspector-splitter"
+            onChange={(clientX, bounds) => {
+              const maxWidth = Math.min(MAX_INSPECTOR_WIDTH, bounds.width - MIN_PREVIEW_WIDTH);
+              setInspectorWidth(Math.round(clamp(bounds.right - clientX, MIN_INSPECTOR_WIDTH, maxWidth)));
+            }}
+          />
+        )}
+        {inspectorOpen && (
           <Inspector
+            width={inspectorWidth}
             kind={kind}
             flow={flow}
             code={code}
@@ -474,7 +503,7 @@ export function App() {
 
         <main className="flex min-h-0 flex-1">
           <section
-            className={cn("bg-panel flex min-w-0 flex-col md:w-(--split) md:shrink-0", mobileTab !== "code" && "hidden md:flex", mobileTab === "code" && "flex-1 md:flex-none")}
+            className={cn("bg-panel flex min-w-0 flex-col md:w-(--split) md:shrink-0", mobileTab !== "code" && "hidden md:flex", mobileTab === "code" && "flex-1 md:flex-none", !codeOpen && "md:hidden")}
             style={{ "--split": `${split * 100}%` } as React.CSSProperties}
           >
             <div className="bg-card flex h-10 shrink-0 items-center gap-1 border-b px-3">
@@ -489,6 +518,9 @@ export function App() {
                   <BookOpen /> <span className="hidden lg:inline">{t.documentation}</span>
                 </a>
               </Button>
+              <span className="hidden md:inline-flex">
+                <IconButton label={t.hideCodeEditor} onClick={() => setCodeOpen(false)} testId="code-close"><PanelLeftClose /></IconButton>
+              </span>
             </div>
             <div className="min-h-0 flex-1">
               <CodeEditor
@@ -506,7 +538,7 @@ export function App() {
             <div className="text-muted-foreground border-t px-3 py-1.5 text-xs">{t.savedLocally}</div>
           </section>
 
-          <Splitter onChange={(fraction) => setSplit(Math.min(0.7, Math.max(0.2, fraction)))} />
+          {codeOpen && <Splitter onChange={(clientX, bounds) => setSplit(clamp((clientX - bounds.left) / bounds.width, MIN_SPLIT, MAX_SPLIT))} />}
           {previewPanel}
         </main>
       </div>
