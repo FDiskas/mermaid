@@ -16,6 +16,11 @@ A free, local-first Mermaid editor. Everything runs in the browser and is kept i
 | --- | --- |
 | Flowchart | Click a node, arrow or group to select it. Double-click to rename inline. Change shape, fill / border / text colour, border width, arrow label, line style (solid / dotted / thick), arrow ends, direction. Add nodes, add connected nodes, connect two nodes, duplicate, reverse, delete (Delete key), ungroup. |
 | Pie chart | Edit title, "show values", and slices (label, value, add, remove). |
+| Timeline | Edit title, sections, periods and events (rename, add, remove). |
+| Quadrant chart | Edit title, axis labels, quadrant names and points (name, x, y, add, remove). |
+| Mind map | Edit the node tree (rename, add child, delete). |
+| User journey | Edit title, sections, tasks (name, score 1–5, actors). |
+| Gantt chart | Edit title, date and axis format, sections, tasks (name, start, end or duration, id, critical / done / active / milestone). |
 
 Visual edits are applied to the code, which stays the single source of truth (they are undoable like typing).
 Flowcharts are parsed with Mermaid's own parser and written back as canonical code, so **comments inside the diagram are not kept** when you edit visually. Front matter and `%%{init}%%` directives are kept.
@@ -44,8 +49,11 @@ To add a language, add its code to every key in the JSON – the language list i
 ```
 src/lib/flowchart/   model, parser (Mermaid's db), serializer, pure editing operations
 src/lib/pie.ts       pie model
+src/lib/timeline.ts, quadrant.ts, mindmap.ts, journey.ts, gantt.ts  models, parsers, serializers
+src/lib/diagram-highlight.ts  highlighting for timeline, quadrant, class, state, ER and git (the CodeMirror Mermaid package has no grammar for them)
 src/lib/export.ts    SVG → PNG / SVG / clipboard
 src/components/      UI (shadcn/ui in components/ui), preview canvas, inspector panels
+src/components/inspector/visual-editors.tsx  registry: one line per diagram type that has a model-based panel
 e2e/run.mjs          Playwright (playwright-core) browser tests
 ```
 

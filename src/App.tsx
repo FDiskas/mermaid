@@ -23,7 +23,6 @@ import { addEdge, addNode, groupItems, removeEdge, removeNode, ungroup, updateEd
 import { serializeFlowchart } from "@/lib/flowchart/serialize";
 import { useTranslate } from "@/lib/i18n";
 import type { DiagramTheme } from "@/lib/mermaid-runtime";
-import { parsePie, serializePie, type PieModel } from "@/lib/pie";
 import { decodeShareHash, encodeShareHash } from "@/lib/share";
 import { DEFAULT_CODE, type Template } from "@/lib/templates";
 import { readRenderedColors } from "@/lib/svg-targets";
@@ -70,7 +69,6 @@ export function App() {
   const kind = useMemo(() => detectDiagramKind(code), [code]);
   const { rendered, error } = useDiagram(code, diagramTheme);
   const [flow, setFlow] = useFlowModel(code, kind === "flowchart");
-  const pie = useMemo(() => (kind === "pie" ? parsePie(code) : null), [code, kind]);
   const snapshots = useSnapshots(code);
 
   useEffect(() => {
@@ -112,7 +110,7 @@ export function App() {
     [setFlow],
   );
 
-  const commitPie = useCallback((next: PieModel) => editor.current?.replace(serializePie(next)), []);
+  const commitCode = useCallback((text: string) => editor.current?.replace(text), []);
 
   // Drop the selection when its element no longer exists.
   useEffect(() => {
@@ -345,13 +343,13 @@ export function App() {
           <Inspector
             kind={kind}
             flow={flow}
-            pie={pie}
+            code={code}
             selection={selection}
             selected={selected}
             hasError={error !== null}
             focusToken={focusToken}
             onFlowChange={commitFlow}
-            onPieChange={commitPie}
+            onCodeChange={commitCode}
             onStartConnect={(source) => setConnect({ source })}
             renderedColors={(target) => readRenderedColors(canvas.current?.elementFor(target) ?? null)}
             onClose={() => setInspectorOpen(false)}

@@ -1,4 +1,6 @@
+import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -33,13 +35,17 @@ interface CommitFieldProps {
   /** Changing this value focuses and selects the field. */
   focusToken?: number;
   inputMode?: "text" | "decimal";
+  /** Step of a number field. */
+  step?: string;
+  /** Accessible name for a field that has no visible label. */
+  ariaLabel?: string;
 }
 
 /**
  * A text field that reports every edit, but ignores incoming prop changes while it has focus.
  * This stops the value being rewritten under the cursor when the diagram is re-parsed.
  */
-export function CommitField({ value, onCommit, multiline, id, type, className, focusToken, inputMode }: CommitFieldProps) {
+export function CommitField({ value, onCommit, multiline, id, type, className, focusToken, inputMode, step, ariaLabel }: CommitFieldProps) {
   const [draft, setDraft] = useState(value);
   const focused = useRef(false);
   const element = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
@@ -57,6 +63,7 @@ export function CommitField({ value, onCommit, multiline, id, type, className, f
 
   const shared = {
     id,
+    "aria-label": ariaLabel,
     value: draft,
     onFocus: () => (focused.current = true),
     onBlur: () => {
@@ -72,7 +79,7 @@ export function CommitField({ value, onCommit, multiline, id, type, className, f
   return multiline ? (
     <Textarea ref={element} rows={2} className={cn("min-h-0 resize-y text-sm", className)} {...shared} />
   ) : (
-    <Input ref={element} type={type} inputMode={inputMode} className={cn("h-8 text-sm", className)} {...shared} />
+    <Input ref={element} type={type} inputMode={inputMode} step={step} className={cn("h-8 text-sm", className)} {...shared} />
   );
 }
 
@@ -121,5 +128,21 @@ export function ColorField({ label, value, fallback, presets, onChange, onClear 
         </div>
       )}
     </Field>
+  );
+}
+
+export function DeleteButton({ label, onClick }: { label: string; onClick(): void }) {
+  return (
+    <Button variant="ghost" size="icon-sm" aria-label={label} title={label} onClick={onClick}>
+      <Trash2 />
+    </Button>
+  );
+}
+
+export function AddButton({ children, onClick }: { children: ReactNode; onClick(): void }) {
+  return (
+    <Button variant="outline" size="sm" className="w-full" onClick={onClick}>
+      <Plus /> {children}
+    </Button>
   );
 }

@@ -3,21 +3,21 @@ import { Button } from "@/components/ui/button";
 import type { FlowModel, Selection } from "@/lib/flowchart/model";
 import type { DiagramKind } from "@/lib/diagram-type";
 import { useTranslate } from "@/lib/i18n";
-import type { PieModel } from "@/lib/pie";
 import { FlowInspector } from "./FlowInspector";
-import { PieInspector } from "./PieInspector";
+import { VISUAL_EDITORS } from "./visual-editors";
 
 interface Props {
   kind: DiagramKind;
   flow: FlowModel | null;
-  pie: PieModel | null;
+  /** The code of the diagram, for the model-based panels. */
+  code: string;
   selection: Selection;
   /** All selected elements (more than one after a Shift-click). */
   selected: NonNullable<Selection>[];
   hasError: boolean;
   focusToken: number;
   onFlowChange(model: FlowModel, nextSelection?: Selection): void;
-  onPieChange(model: PieModel): void;
+  onCodeChange(code: string): void;
   onStartConnect(sourceId: string): void;
   renderedColors(selection: NonNullable<Selection>): { fill?: string; stroke?: string; color?: string };
   onClose(): void;
@@ -26,17 +26,16 @@ interface Props {
 /** The side panel of the visual editor. What it shows depends on the diagram type and the selected element. */
 export function Inspector(props: Props) {
   const t = useTranslate();
-  const { kind, flow, pie, hasError } = props;
+  const { kind, flow, hasError } = props;
+  const visual = VISUAL_EDITORS[kind];
 
   let body;
   if (kind === "flowchart" && flow) {
     body = <FlowInspector model={flow} selection={props.selection} selected={props.selected} onChange={props.onFlowChange} onStartConnect={props.onStartConnect} renderedColors={props.renderedColors} focusToken={props.focusToken} />;
-  } else if (kind === "pie" && pie) {
-    body = <PieInspector model={pie} onChange={props.onPieChange} />;
-  } else if (hasError && (kind === "flowchart" || kind === "pie")) {
-    body = <p className="text-muted-foreground p-4 text-sm">{t.fixSyntaxFirst}</p>;
-  } else if (kind === "flowchart" || kind === "pie") {
-    body = null;
+  } else if (visual) {
+    body = visual.render(props.code, props.onCodeChange) ?? (hasError ? <p className="text-muted-foreground p-4 text-sm">{t.fixSyntaxFirst}</p> : null);
+  } else if (kind === "flowchart") {
+    body = hasError ? <p className="text-muted-foreground p-4 text-sm">{t.fixSyntaxFirst}</p> : null;
   } else {
     body = <p className="text-muted-foreground p-4 text-sm leading-relaxed">{t.unsupportedVisual}</p>;
   }

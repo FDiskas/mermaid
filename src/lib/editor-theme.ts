@@ -12,6 +12,7 @@ import {
   requirementTags,
   sequenceTags,
 } from "codemirror-lang-mermaid";
+import { HIGHLIGHT_ROLES, highlightClass } from "@/lib/diagram-highlight";
 
 type Role = "comment" | "keyword" | "number" | "operator" | "identifier" | "string";
 
@@ -67,6 +68,16 @@ function highlightStyle(mode: "dark" | "light"): HighlightStyle {
   return HighlightStyle.define(specs);
 }
 
+/** Colours for the tokens that `diagram-highlight.ts` marks with CSS classes. */
+function markedTokensTheme(mode: "dark" | "light"): Extension {
+  const colors = PALETTE[mode];
+  const rules: Record<string, Record<string, string>> = {};
+  for (const role of HIGHLIGHT_ROLES) {
+    rules[`.${highlightClass(role)}`] = role === "comment" ? { color: colors[role], fontStyle: "italic" } : { color: colors[role] };
+  }
+  return EditorView.theme(rules, { dark: mode === "dark" });
+}
+
 const baseTheme = EditorView.theme({
   "&": { height: "100%", backgroundColor: "transparent", fontSize: "13px", color: "var(--foreground)" },
   "&.cm-focused": { outline: "none" },
@@ -93,5 +104,6 @@ export function editorTheme(dark: boolean): Extension {
       { dark },
     ),
     syntaxHighlighting(highlightStyle(mode)),
+    markedTokensTheme(mode),
   ];
 }

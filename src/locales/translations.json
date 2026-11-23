@@ -944,12 +944,12 @@
     "ru": "Визуальные правки пересоздают код. Комментарии не сохраняются."
   },
   "unsupportedVisual": {
-    "en": "The visual editor supports flowcharts and pie charts. Use the code editor for this diagram type.",
-    "lt": "Vizualinis redaktorius palaiko srautų ir skritulines diagramas. Šiam diagramos tipui naudokite kodo redaktorių.",
-    "es": "El editor visual admite diagramas de flujo y gráficos circulares. Usa el editor de código para este tipo de diagrama.",
-    "fr": "L'éditeur visuel prend en charge les organigrammes et les camemberts. Utilisez l'éditeur de code pour ce type de diagramme.",
-    "de": "Der visuelle Editor unterstützt Flussdiagramme und Kreisdiagramme. Nutze für diesen Diagrammtyp den Code-Editor.",
-    "ru": "Визуальный редактор поддерживает блок-схемы и круговые диаграммы. Для этого типа диаграмм используйте редактор кода."
+    "en": "The visual editor supports flowcharts, pie charts, timelines, quadrant charts, mind maps, journeys and Gantt charts. Use the code editor for this diagram type.",
+    "lt": "Vizualinis redaktorius palaiko srautų, skritulines, laiko juostų, kvadrantų, minčių žemėlapių, kelionių ir Gantto diagramas. Šiam diagramos tipui naudokite kodo redaktorių.",
+    "es": "El editor visual admite diagramas de flujo, gráficos circulares, cronologías, gráficos de cuadrantes, mapas mentales, recorridos y diagramas de Gantt. Usa el editor de código para este tipo de diagrama.",
+    "fr": "L'éditeur visuel prend en charge les organigrammes, les camemberts, les chronologies, les diagrammes en quadrants, les cartes mentales, les parcours et les diagrammes de Gantt. Utilisez l'éditeur de code pour ce type de diagramme.",
+    "de": "Der visuelle Editor unterstützt Flussdiagramme, Kreisdiagramme, Zeitleisten, Quadrantendiagramme, Mindmaps, User Journeys und Gantt-Diagramme. Nutze für diesen Diagrammtyp den Code-Editor.",
+    "ru": "Визуальный редактор поддерживает блок-схемы, круговые диаграммы, хронологии, квадрантные диаграммы, ментальные карты, пользовательские пути и диаграммы Ганта. Для этого типа диаграмм используйте редактор кода."
   },
   "fixSyntaxFirst": {
     "en": "Fix the syntax error to use the visual editor.",
@@ -1100,5 +1100,309 @@
     "fr": "Regroupez les nœuds sélectionnés dans un cadre. Cliquez avec Maj sur d'autres nœuds ou groupes pour les ajouter ou les retirer.",
     "de": "Fasse die ausgewählten Knoten in einem Kasten zusammen. Mit Umschalt-Klick auf weitere Knoten oder Gruppen fügst du sie hinzu oder entfernst sie.",
     "ru": "Объедините выбранные узлы в одну рамку. Щёлкните с Shift по другим узлам или группам, чтобы добавить или убрать их."
+  },
+  "timelineTitle": {
+    "en": "Timeline title",
+    "lt": "Laiko juostos pavadinimas",
+    "es": "Título de la cronología",
+    "fr": "Titre de la chronologie",
+    "de": "Titel der Zeitleiste",
+    "ru": "Название хронологии"
+  },
+  "sectionTitle": {
+    "en": "Section",
+    "lt": "Skyrius",
+    "es": "Sección",
+    "fr": "Section",
+    "de": "Abschnitt",
+    "ru": "Раздел"
+  },
+  "addSection": {
+    "en": "Add section",
+    "lt": "Pridėti skyrių",
+    "es": "Añadir sección",
+    "fr": "Ajouter une section",
+    "de": "Abschnitt hinzufügen",
+    "ru": "Добавить раздел"
+  },
+  "addPeriod": {
+    "en": "Add period",
+    "lt": "Pridėti laikotarpį",
+    "es": "Añadir periodo",
+    "fr": "Ajouter une période",
+    "de": "Zeitraum hinzufügen",
+    "ru": "Добавить период"
+  },
+  "addEvent": {
+    "en": "Add event",
+    "lt": "Pridėti įvykį",
+    "es": "Añadir evento",
+    "fr": "Ajouter un événement",
+    "de": "Ereignis hinzufügen",
+    "ru": "Добавить событие"
+  },
+  "periodLabel": {
+    "en": "Period",
+    "lt": "Laikotarpis",
+    "es": "Periodo",
+    "fr": "Période",
+    "de": "Zeitraum",
+    "ru": "Период"
+  },
+  "eventLabel": {
+    "en": "Event",
+    "lt": "Įvykis",
+    "es": "Evento",
+    "fr": "Événement",
+    "de": "Ereignis",
+    "ru": "Событие"
+  },
+  "diagramTitle": {
+    "en": "Title",
+    "lt": "Pavadinimas",
+    "es": "Título",
+    "fr": "Titre",
+    "de": "Titel",
+    "ru": "Название"
+  },
+  "axesTitle": {
+    "en": "Axes",
+    "lt": "Ašys",
+    "es": "Ejes",
+    "fr": "Axes",
+    "de": "Achsen",
+    "ru": "Оси"
+  },
+  "quadrantsTitle": {
+    "en": "Quadrants",
+    "lt": "Kvadrantai",
+    "es": "Cuadrantes",
+    "fr": "Quadrants",
+    "de": "Quadranten",
+    "ru": "Квадранты"
+  },
+  "pointsTitle": {
+    "en": "Points",
+    "lt": "Taškai",
+    "es": "Puntos",
+    "fr": "Points",
+    "de": "Punkte",
+    "ru": "Точки"
+  },
+  "xAxisLeft": {
+    "en": "X axis: left",
+    "lt": "X ašis: kairė",
+    "es": "Eje X: izquierda",
+    "fr": "Axe X : gauche",
+    "de": "X-Achse: links",
+    "ru": "Ось X: слева"
+  },
+  "xAxisRight": {
+    "en": "X axis: right",
+    "lt": "X ašis: dešinė",
+    "es": "Eje X: derecha",
+    "fr": "Axe X : droite",
+    "de": "X-Achse: rechts",
+    "ru": "Ось X: справа"
+  },
+  "yAxisBottom": {
+    "en": "Y axis: bottom",
+    "lt": "Y ašis: apačia",
+    "es": "Eje Y: abajo",
+    "fr": "Axe Y : bas",
+    "de": "Y-Achse: unten",
+    "ru": "Ось Y: снизу"
+  },
+  "yAxisTop": {
+    "en": "Y axis: top",
+    "lt": "Y ašis: viršus",
+    "es": "Eje Y: arriba",
+    "fr": "Axe Y : haut",
+    "de": "Y-Achse: oben",
+    "ru": "Ось Y: сверху"
+  },
+  "quadrant1": {
+    "en": "Quadrant 1 (top right)",
+    "lt": "1 kvadrantas (viršuje dešinėje)",
+    "es": "Cuadrante 1 (arriba a la derecha)",
+    "fr": "Quadrant 1 (en haut à droite)",
+    "de": "Quadrant 1 (oben rechts)",
+    "ru": "Квадрант 1 (сверху справа)"
+  },
+  "quadrant2": {
+    "en": "Quadrant 2 (top left)",
+    "lt": "2 kvadrantas (viršuje kairėje)",
+    "es": "Cuadrante 2 (arriba a la izquierda)",
+    "fr": "Quadrant 2 (en haut à gauche)",
+    "de": "Quadrant 2 (oben links)",
+    "ru": "Квадрант 2 (сверху слева)"
+  },
+  "quadrant3": {
+    "en": "Quadrant 3 (bottom left)",
+    "lt": "3 kvadrantas (apačioje kairėje)",
+    "es": "Cuadrante 3 (abajo a la izquierda)",
+    "fr": "Quadrant 3 (en bas à gauche)",
+    "de": "Quadrant 3 (unten links)",
+    "ru": "Квадрант 3 (снизу слева)"
+  },
+  "quadrant4": {
+    "en": "Quadrant 4 (bottom right)",
+    "lt": "4 kvadrantas (apačioje dešinėje)",
+    "es": "Cuadrante 4 (abajo a la derecha)",
+    "fr": "Quadrant 4 (en bas à droite)",
+    "de": "Quadrant 4 (unten rechts)",
+    "ru": "Квадрант 4 (снизу справа)"
+  },
+  "addPoint": {
+    "en": "Add point",
+    "lt": "Pridėti tašką",
+    "es": "Añadir punto",
+    "fr": "Ajouter un point",
+    "de": "Punkt hinzufügen",
+    "ru": "Добавить точку"
+  },
+  "nameLabel": {
+    "en": "Name",
+    "lt": "Pavadinimas",
+    "es": "Nombre",
+    "fr": "Nom",
+    "de": "Name",
+    "ru": "Название"
+  },
+  "pointX": {
+    "en": "X position",
+    "lt": "X padėtis",
+    "es": "Posición X",
+    "fr": "Position X",
+    "de": "X-Position",
+    "ru": "Позиция X"
+  },
+  "pointY": {
+    "en": "Y position",
+    "lt": "Y padėtis",
+    "es": "Posición Y",
+    "fr": "Position Y",
+    "de": "Y-Position",
+    "ru": "Позиция Y"
+  },
+  "addChild": {
+    "en": "Add child",
+    "lt": "Pridėti vaikinį mazgą",
+    "es": "Añadir hijo",
+    "fr": "Ajouter un enfant",
+    "de": "Unterknoten hinzufügen",
+    "ru": "Добавить дочерний узел"
+  },
+  "nodeText": {
+    "en": "Node text",
+    "lt": "Mazgo tekstas",
+    "es": "Texto del nodo",
+    "fr": "Texte du nœud",
+    "de": "Knotentext",
+    "ru": "Текст узла"
+  },
+  "addTask": {
+    "en": "Add task",
+    "lt": "Pridėti užduotį",
+    "es": "Añadir tarea",
+    "fr": "Ajouter une tâche",
+    "de": "Aufgabe hinzufügen",
+    "ru": "Добавить задачу"
+  },
+  "taskName": {
+    "en": "Task",
+    "lt": "Užduotis",
+    "es": "Tarea",
+    "fr": "Tâche",
+    "de": "Aufgabe",
+    "ru": "Задача"
+  },
+  "taskScore": {
+    "en": "Score",
+    "lt": "Įvertinimas",
+    "es": "Puntuación",
+    "fr": "Score",
+    "de": "Bewertung",
+    "ru": "Оценка"
+  },
+  "taskActors": {
+    "en": "Actors, comma separated",
+    "lt": "Dalyviai, atskirti kableliais",
+    "es": "Actores, separados por comas",
+    "fr": "Acteurs, séparés par des virgules",
+    "de": "Akteure, durch Komma getrennt",
+    "ru": "Участники через запятую"
+  },
+  "dateFormat": {
+    "en": "Date format",
+    "lt": "Datos formatas",
+    "es": "Formato de fecha",
+    "fr": "Format de date",
+    "de": "Datumsformat",
+    "ru": "Формат даты"
+  },
+  "axisFormat": {
+    "en": "Axis format",
+    "lt": "Ašies formatas",
+    "es": "Formato del eje",
+    "fr": "Format de l'axe",
+    "de": "Achsenformat",
+    "ru": "Формат оси"
+  },
+  "ganttStart": {
+    "en": "Start",
+    "lt": "Pradžia",
+    "es": "Inicio",
+    "fr": "Début",
+    "de": "Start",
+    "ru": "Начало"
+  },
+  "ganttEnd": {
+    "en": "End or duration",
+    "lt": "Pabaiga arba trukmė",
+    "es": "Fin o duración",
+    "fr": "Fin ou durée",
+    "de": "Ende oder Dauer",
+    "ru": "Конец или длительность"
+  },
+  "taskId": {
+    "en": "ID",
+    "lt": "ID",
+    "es": "ID",
+    "fr": "ID",
+    "de": "ID",
+    "ru": "ID"
+  },
+  "tagCrit": {
+    "en": "Critical",
+    "lt": "Kritinė",
+    "es": "Crítica",
+    "fr": "Critique",
+    "de": "Kritisch",
+    "ru": "Критичная"
+  },
+  "tagDone": {
+    "en": "Done",
+    "lt": "Atlikta",
+    "es": "Hecha",
+    "fr": "Terminée",
+    "de": "Erledigt",
+    "ru": "Готово"
+  },
+  "tagActive": {
+    "en": "Active",
+    "lt": "Aktyvi",
+    "es": "Activa",
+    "fr": "Active",
+    "de": "Aktiv",
+    "ru": "Активна"
+  },
+  "tagMilestone": {
+    "en": "Milestone",
+    "lt": "Etapas",
+    "es": "Hito",
+    "fr": "Jalon",
+    "de": "Meilenstein",
+    "ru": "Веха"
   }
 }

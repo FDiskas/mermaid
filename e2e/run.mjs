@@ -11,7 +11,7 @@ const CHROME = process.env.CHROME_PATH ?? "/Applications/Google Chrome.app/Conte
 const OUT = new URL("./out/", import.meta.url).pathname;
 mkdirSync(OUT, { recursive: true });
 
-const BLOCKS = ["flowchart", "pie", "templates", "zoom", "app", "mobile"];
+const BLOCKS = ["flowchart", "pie", "timeline", "diagrams", "templates", "zoom", "app", "mobile"];
 const ONLY = process.env.ONLY;
 if (!ONLY) {
   // A fresh browser per block keeps long runs reliable.
@@ -363,6 +363,149 @@ if (ONLY === "pie") {
   await page.context().close();
 }
 
+/* ---------- Timeline: highlighting + visual editing ---------- */
+if (ONLY === "timeline") {
+  const TIMELINE = `timeline\n    title Main steps\n    section Early\n        2021 : Composable approved\n             : Sanity headless\n    section Later\n        2024 Q4 : Pricing decided\n`;
+  const page = await open({ code: TIMELINE, theme: "dark" });
+
+  await check("code editor highlights timeline tokens", async () => {
+    for (const role of ["keyword", "number", "operator", "string"]) {
+      assert((await page.locator(`.cm-line .cm-mmd-${role}`).count()) > 0, `no ${role} token`);
+    }
+    const colors = await page.$$eval(".cm-line .cm-mmd-keyword, .cm-line .cm-mmd-string", (els) => new Set(els.map((el) => getComputedStyle(el).color)).size);
+    assert(colors > 1, "keyword and string share one colour");
+    await page.screenshot({ path: OUT + "06-timeline-dark.png" });
+  });
+
+  await check("timeline inspector edits the code", async () => {
+    await page.waitForSelector("[data-testid=timeline-inspector]");
+    const periods = page.locator("[data-testid=timeline-period]");
+    assert((await periods.count()) === 2, "should list 2 periods");
+    await page.fill("#timeline-title", "Steps");
+    await waitCode(page, (c) => c.includes("title Steps"), "title");
+    await periods.nth(0).getByLabel("Period").fill("2022");
+    await waitCode(page, (c) => c.includes("2022 : Composable approved : Sanity headless"), "period label");
+    await periods.nth(0).getByLabel("Event").first().fill("Ratio: 1");
+    await waitCode(page, (c) => c.includes("Ratio#colon; 1"), "event with colon");
+    await page.waitForFunction(() => /Ratio:\s+1/.test(document.querySelector("[data-testid=diagram]").textContent));
+    await periods.nth(1).getByRole("button", { name: /Add event/ }).click();
+    await waitCode(page, (c) => c.includes("2024 Q4 : Pricing decided : Event"), "add event");
+    await page.getByRole("button", { name: /Add section/ }).click();
+    await waitCode(page, (c) => /section Section\n\s+Period : Event/.test(c), "add section");
+    await page.locator("[data-testid=section]").nth(2).getByRole("button", { name: "Delete" }).first().click();
+    await waitCode(page, (c) => !c.includes("section Section"), "delete section");
+  });
+  assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+  await page.context().close();
+}
+
+/* ---------- Highlighting and visual editing of the other diagram types ---------- */
+if (ONLY === "diagrams") {
+  const SAMPLES = {
+    class: `classDiagram\n    class Animal {\n      +String name\n    }\n    Animal <|-- Dog : is\n`,
+    state: `stateDiagram-v2\n    [*] --> Idle\n    Idle --> Loading: fetch\n`,
+    er: `erDiagram\n    CUSTOMER ||--o{ ORDER : places\n    CUSTOMER {\n      int id PK\n    }\n`,
+    git: `gitGraph\n    commit id: "Alpha"\n    branch develop\n    checkout develop\n    commit\n`,
+    quadrant: `quadrantChart\n    title Reach\n    x-axis Low --> High\n    Campaign A: [0.3, 0.6]\n`,
+  };
+  for (const [kind, code] of Object.entries(SAMPLES)) {
+    await check(`code editor highlights ${kind} diagrams`, async () => {
+      const page = await open({ code, theme: "dark" });
+      for (const role of ["keyword", "operator"]) {
+        assert((await page.locator(`.cm-line .cm-mmd-${role}`).count()) > 0, `no ${role} token`);
+      }
+      await page.screenshot({ path: OUT + `07-highlight-${kind}.png` });
+      await page.context().close();
+    });
+  }
+
+  const renderFailed = (page) => page.locator("[data-testid=render-error]").count();
+
+  await check("quadrant inspector edits the code", async () => {
+    const code = `quadrantChart\n    title Reach\n    x-axis Low --> High\n    quadrant-1 Expand\n    Campaign A: [0.3, 0.6]\n    Campaign B: [0.45, 0.23]\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=quadrant-inspector]");
+    await page.fill("#quadrant-title", "Engagement");
+    await waitCode(page, (c) => c.includes("title Engagement"), "title");
+    await page.getByLabel("X axis: right").fill("Very high");
+    await waitCode(page, (c) => c.includes("x-axis Low --> Very high"), "axis");
+    await page.getByLabel("Quadrant 2 (top left)").fill("Promote");
+    await waitCode(page, (c) => c.includes("quadrant-2 Promote"), "quadrant name");
+    const points = page.locator("[data-testid=quadrant-point]");
+    await points.nth(0).getByLabel("X position").fill("0.9");
+    await waitCode(page, (c) => c.includes("Campaign A: [0.9, 0.6]"), "point x");
+    await page.getByRole("button", { name: "Add point" }).click();
+    await waitCode(page, (c) => c.includes("New node: [0.5, 0.5]"), "add point");
+    await points.nth(2).getByRole("button", { name: "Delete" }).click();
+    await waitCode(page, (c) => !c.includes("New node"), "delete point");
+    await page.waitForTimeout(500);
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+    await page.screenshot({ path: OUT + "08-quadrant-editor.png" });
+    await page.context().close();
+  });
+
+  await check("mindmap inspector edits the tree", async () => {
+    const code = `mindmap\n  root((Ideas))\n    Origins\n      History\n    Tools\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=mindmap-inspector]");
+    assert((await page.locator("[data-testid=mindmap-node]").count()) === 4, "should list 4 nodes");
+    await page.getByLabel("Node text").nth(1).fill("Beginnings");
+    await waitCode(page, (c) => c.includes("    Beginnings\n      History"), "rename");
+    await page.getByRole("button", { name: "Add child" }).nth(2).click();
+    await waitCode(page, (c) => c.includes("      History\n        New node"), "add child");
+    await page.getByRole("button", { name: "Delete" }).nth(4).click();
+    await waitCode(page, (c) => !c.includes("Tools"), "delete");
+    await page.waitForTimeout(500);
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+    await page.screenshot({ path: OUT + "09-mindmap-editor.png" });
+    await page.context().close();
+  });
+
+  await check("journey inspector edits tasks", async () => {
+    const code = `journey\n    title My day\n    section Work\n        Make tea: 5: Me\n        Do work: 1: Me, Cat\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=journey-inspector]");
+    const tasks = page.locator("[data-testid=journey-task]");
+    await tasks.nth(0).getByRole("button", { name: "Score 2" }).click();
+    await waitCode(page, (c) => c.includes("Make tea: 2: Me"), "score");
+    await tasks.nth(0).getByLabel("Actors, comma separated").fill("Me, Dog");
+    await waitCode(page, (c) => c.includes("Make tea: 2: Me, Dog"), "actors");
+    await page.getByRole("button", { name: "Add task" }).click();
+    await waitCode(page, (c) => c.includes("Task: 3"), "add task");
+    await page.getByRole("button", { name: "Add section" }).click();
+    await waitCode(page, (c) => /section Section\n\s+Task: 3/.test(c), "add section");
+    await page.waitForTimeout(500);
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+    await page.screenshot({ path: OUT + "10-journey-editor.png" });
+    await page.context().close();
+  });
+
+  await check("gantt inspector edits tasks", async () => {
+    const code = `gantt\n    title Plan\n    dateFormat YYYY-MM-DD\n    section Build\n    A task :a1, 2014-01-01, 30d\n    Another :after a1, 20d\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=gantt-inspector]");
+    const tasks = page.locator("[data-testid=gantt-task]");
+    await page.fill("#gantt-date-format", "DD/MM/YYYY");
+    await waitCode(page, (c) => c.includes("dateFormat DD/MM/YYYY"), "date format");
+    await page.fill("#gantt-date-format", "YYYY-MM-DD");
+    await waitCode(page, (c) => c.includes("dateFormat YYYY-MM-DD"), "date format back");
+    await tasks.nth(0).getByRole("button", { name: "Critical" }).click();
+    await waitCode(page, (c) => c.includes("A task :crit, a1, 2014-01-01, 30d"), "critical flag");
+    await tasks.nth(1).getByLabel("End or duration").fill("5d");
+    await waitCode(page, (c) => c.includes("Another :after a1, 5d"), "duration");
+    await page.getByRole("button", { name: "Add task" }).first().click();
+    await waitCode(page, (c) => c.includes("Task :3d"), "add task");
+    await page.waitForTimeout(500);
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+    await page.screenshot({ path: OUT + "11-gantt-editor.png" });
+    await page.context().close();
+  });
+}
+
 /* ---------- Every template: renders, exports ---------- */
 if (ONLY === "templates") {
   const page = await open({});
@@ -385,12 +528,12 @@ if (ONLY === "templates") {
       await page.waitForSelector("[role=menu]", { state: "detached" });
     });
   }
-  await check("non-flowchart/pie diagrams explain the visual editor limits", async () => {
+  await check("diagrams without an editor explain the visual editor limits", async () => {
     await page.click("[data-testid=template-trigger]");
     await page.click("[data-testid=template-sequence]");
     await page.waitForTimeout(500);
     const text = await page.textContent("[data-testid=inspector]");
-    assert(/flowcharts and pie charts/.test(text), "unsupported message missing");
+    assert(/Gantt charts/.test(text), "unsupported message missing");
   });
   await page.context().close();
 }

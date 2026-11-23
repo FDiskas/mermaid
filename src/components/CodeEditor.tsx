@@ -8,6 +8,7 @@ import { drawSelection, EditorView, highlightActiveLine, highlightActiveLineGutt
 import { mermaid } from "codemirror-lang-mermaid";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { editorTheme } from "@/lib/editor-theme";
+import { diagramHighlight } from "@/lib/diagram-highlight";
 
 export interface CodeEditorHandle {
   /** Replace the whole document. Becomes one undo step. */
@@ -90,6 +91,7 @@ export const CodeEditor = forwardRef<CodeEditorHandle, Props>(function CodeEdito
           EditorView.lineWrapping,
           keymap.of([...closeBracketsKeymap, ...defaultKeymap, ...searchKeymap, ...historyKeymap, indentWithTab]),
           mermaid(),
+          diagramHighlight,
           themeCompartment.of(editorTheme(dark)),
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
