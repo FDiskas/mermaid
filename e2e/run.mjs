@@ -11,7 +11,7 @@ const CHROME = process.env.CHROME_PATH ?? "/Applications/Google Chrome.app/Conte
 const OUT = new URL("./out/", import.meta.url).pathname;
 mkdirSync(OUT, { recursive: true });
 
-const BLOCKS = ["flowchart", "pie", "timeline", "diagrams", "templates", "zoom", "app", "mobile"];
+const BLOCKS = ["flowchart", "pie", "timeline", "diagrams", "line-editors", "templates", "zoom", "app", "mobile"];
 const ONLY = process.env.ONLY;
 if (!ONLY) {
   // A fresh browser per block keeps long runs reliable.
@@ -506,6 +506,160 @@ if (ONLY === "diagrams") {
   });
 }
 
+/* ---------- Sequence, class, state, ER and git editors ---------- */
+if (ONLY === "line-editors") {
+  const renderFailed = (page) => page.locator("[data-testid=render-error]").count();
+
+  await check("sequence inspector edits messages and keeps blocks and notes", async () => {
+    const code = `sequenceDiagram\n    autonumber\n    participant U as User\n    actor B\n    U->>B: Open the page\n    loop Every minute\n        B-->>U: poll\n        Note over U,B: Stored locally\n    end\n    activate U\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=sequence-inspector]");
+    assert((await page.locator("[data-testid=sequence-participant]").count()) === 2, "should list 2 participants");
+    assert((await page.locator("[data-testid=sequence-step]").count()) === 3, "should list 2 messages and 1 note");
+    await page.getByLabel("Message text").first().fill("Open it");
+    await waitCode(page, (c) => c.includes("    U->>B: Open it\n    loop Every minute"), "message text");
+    await page.getByLabel("Display name").nth(1).fill("Browser");
+    await waitCode(page, (c) => c.includes("actor B as Browser"), "alias");
+    await page.getByLabel("Arrow").first().selectOption("-->>");
+    await waitCode(page, (c) => c.includes("U-->>B: Open it"), "arrow");
+    await page.getByRole("button", { name: "Add message" }).click();
+    await waitCode(page, (c) => c.trimEnd().endsWith("U->>B: Message"), "add message");
+    await page.getByRole("button", { name: "Add participant" }).click();
+    await waitCode(page, (c) => c.includes("actor B as Browser\n    participant A\n"), "add participant");
+    await page.getByRole("button", { name: "Delete" }).nth(3).click();
+    await waitCode(page, (c) => !c.includes("Open it"), "delete message");
+    const text = await editorText(page);
+    for (const kept of ["autonumber", "loop Every minute", "Note over U,B: Stored locally", "    end", "activate U"]) assert(text.includes(kept), "lost line: " + kept);
+    await page.waitForTimeout(500);
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+    await page.screenshot({ path: OUT + "12-sequence-editor.png" });
+    await page.context().close();
+  });
+
+  await check("a sequence edit that Mermaid refuses is not applied", async () => {
+    const code = `sequenceDiagram\n    A->>+B: hi\n    B-->>-A: bye\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=sequence-inspector]");
+    // Without the first message, `-A` would deactivate a participant that is not active.
+    await page.getByRole("button", { name: "Delete" }).nth(0).click();
+    await page.waitForSelector("[data-testid=edit-rejected]");
+    assert((await editorText(page)) === code, "a refused edit changed the code");
+    assert((await page.locator("[data-testid=render-error]").count()) === 0, "diagram failed to render");
+    // The next valid edit clears the notice.
+    await page.getByLabel("Message text").first().fill("hello");
+    await waitCode(page, (c) => c.includes("A->>+B: hello"), "valid edit");
+    assert((await page.$("[data-testid=edit-rejected]")) === null, "the notice stayed");
+    await page.context().close();
+  });
+
+  await check("state inspector edits transitions and texts", async () => {
+    const code = `stateDiagram-v2\n    direction LR\n    [*] --> Idle\n    Idle --> Loading: fetch\n    state Failure {\n        [*] --> Retry\n    }\n    Loading --> [*]\n    note right of Idle : start here\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=state-inspector]");
+    await page.getByLabel("Label").nth(1).fill("load");
+    await waitCode(page, (c) => c.includes("Idle --> Loading: load"), "label");
+    await page.getByLabel("Description").first().fill("Waiting");
+    await waitCode(page, (c) => c.includes("Idle : Waiting"), "state text");
+    await page.getByRole("button", { name: "Add state" }).click();
+    await waitCode(page, (c) => c.includes("State : New state"), "add state");
+    await page.getByRole("button", { name: "Add transition" }).click();
+    await waitCode(page, (c) => /Idle --> Loading\n?$/.test(c.trimEnd()) || c.includes("State : New state\n    Idle --> Loading"), "add transition");
+    const text = await editorText(page);
+    for (const kept of ["direction LR", "state Failure {", "[*] --> Retry", "note right of Idle : start here"]) assert(text.includes(kept), "lost line: " + kept);
+    await page.waitForTimeout(500);
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+    await page.screenshot({ path: OUT + "13-state-editor.png" });
+    await page.context().close();
+  });
+
+  await check("class inspector edits classes and relations", async () => {
+    const code = `classDiagram\n    class Animal {\n      +String name\n    }\n    class Dog\n    Animal <|-- Dog\n    note for Dog "friendly"\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=class-inspector]");
+    await page.getByLabel("Member", { exact: true }).first().fill("+String title");
+    await waitCode(page, (c) => c.includes("+String title"), "member");
+    await page.getByRole("button", { name: "Add member" }).first().click();
+    await waitCode(page, (c) => c.includes("+member"), "add member");
+    await page.getByLabel("Arrow").first().selectOption("*--");
+    await waitCode(page, (c) => c.includes("Animal *-- Dog"), "arrow");
+    await page.getByRole("button", { name: "Add class" }).click();
+    await waitCode(page, (c) => c.includes("class NewClass"), "add class");
+    await page.getByRole("button", { name: "Add relation" }).click();
+    await waitCode(page, (c) => c.trimEnd().endsWith("Animal --> Dog"), "add relation");
+    const text = await editorText(page);
+    assert(text.includes('note for Dog "friendly"'), "lost the note");
+    await page.waitForTimeout(500);
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+    await page.screenshot({ path: OUT + "14-class-editor.png" });
+    await page.context().close();
+  });
+
+  await check("er inspector edits entities and relationships", async () => {
+    const code = `erDiagram\n    CUSTOMER ||--o{ ORDER : places\n    CUSTOMER {\n      string name PK\n    }\n    ORDER {\n      int id\n    }\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=er-inspector]");
+    await page.getByLabel("Name", { exact: true }).first().fill("fullName");
+    await waitCode(page, (c) => c.includes("string fullName PK"), "attribute name");
+    await page.getByRole("button", { name: "Add attribute" }).first().click();
+    await waitCode(page, (c) => c.includes("string id\n    }\n    ORDER"), "add attribute");
+    await page.getByLabel("Multiplicity at end").first().selectOption("|{");
+    await waitCode(page, (c) => c.includes("CUSTOMER ||--|{ ORDER : places"), "cardinality");
+    await page.getByRole("button", { name: "Add entity" }).click();
+    await waitCode(page, (c) => c.includes("ENTITY {"), "add entity");
+    await page.getByLabel("Entity name").last().fill("SHOP");
+    await waitCode(page, (c) => c.includes("SHOP {"), "rename new entity");
+    await page.waitForTimeout(500);
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    assert(page.errors.length === 0, "console errors: " + page.errors.join(" | "));
+    await page.screenshot({ path: OUT + "15-er-editor.png" });
+    await page.context().close();
+  });
+
+  await check("git inspector edits commands and keeps the graph valid", async () => {
+    const code = `gitGraph\n    commit id: "init"\n    branch develop\n    checkout develop\n    commit\n    checkout main\n    merge develop tag: "v1"\n`;
+    const page = await open({ code, theme: "dark" });
+    await page.waitForSelector("[data-testid=git-inspector]");
+    assert((await page.locator("[data-testid=git-command]").count()) === 6, "should list 6 commands");
+    await page.getByLabel("Branch name").first().fill("feature");
+    await waitCode(page, (c) => c.includes("branch feature") && c.includes("checkout feature") && c.includes("merge feature"), "rename branch");
+    await page.getByLabel("Type").nth(1).selectOption("HIGHLIGHT");
+    await waitCode(page, (c) => c.includes("commit type: HIGHLIGHT"), "commit type");
+    await page.getByRole("button", { name: "Add commit" }).click();
+    await waitCode(page, (c) => c.trimEnd().endsWith("commit"), "add commit");
+    await page.getByRole("button", { name: "Delete" }).nth(6).click();
+    await waitCode(page, (c) => !c.trimEnd().endsWith("commit") || c.trimEnd().endsWith("v1\""), "delete commit");
+    // Without the first commit the branch has nothing to start from: Mermaid refuses it, so nothing changes.
+    const before = await editorText(page);
+    await page.getByRole("button", { name: "Delete" }).nth(0).click();
+    await page.waitForSelector("[data-testid=edit-rejected]");
+    assert((await editorText(page)) === before, "a refused edit changed the code");
+    assert((await renderFailed(page)) === 0, "diagram failed to render");
+    await page.screenshot({ path: OUT + "16-git-editor.png" });
+    await page.context().close();
+  });
+
+  await check("every template with a panel shows it", async () => {
+    for (const kind of ["sequence", "class", "state", "er", "git"]) {
+      const templatePage = await open({});
+      await templatePage.click("[data-testid=template-trigger]");
+      await templatePage.click(`[data-testid=template-${kind}]`);
+      await templatePage.waitForSelector(`[data-testid=${kind}-inspector]`, { timeout: 5000 });
+      assert((await templatePage.locator("[data-testid=render-error]").count()) === 0, `${kind} failed to render`);
+      await templatePage.context().close();
+    }
+  });
+  await check("diagrams without an editor explain the visual editor limits", async () => {
+    const otherPage = await open({ code: "requirementDiagram\n    requirement r1 {\n        id: 1\n        text: x\n        risk: low\n        verifymethod: test\n    }\n" });
+    await otherPage.waitForTimeout(500);
+    const text = await otherPage.textContent("[data-testid=inspector]");
+    assert(/no visual editor/.test(text), "unsupported message missing");
+    await otherPage.context().close();
+  });
+}
+
 /* ---------- Every template: renders, exports ---------- */
 if (ONLY === "templates") {
   const page = await open({});
@@ -528,13 +682,6 @@ if (ONLY === "templates") {
       await page.waitForSelector("[role=menu]", { state: "detached" });
     });
   }
-  await check("diagrams without an editor explain the visual editor limits", async () => {
-    await page.click("[data-testid=template-trigger]");
-    await page.click("[data-testid=template-sequence]");
-    await page.waitForTimeout(500);
-    const text = await page.textContent("[data-testid=inspector]");
-    assert(/Gantt charts/.test(text), "unsupported message missing");
-  });
   await page.context().close();
 }
 

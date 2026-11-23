@@ -21,9 +21,16 @@ A free, local-first Mermaid editor. Everything runs in the browser and is kept i
 | Mind map | Edit the node tree (rename, add child, delete). |
 | User journey | Edit title, sections, tasks (name, score 1–5, actors). |
 | Gantt chart | Edit title, date and axis format, sections, tasks (name, start, end or duration, id, critical / done / active / milestone). |
+| Sequence diagram | Edit participants and actors (display name), messages (sender, receiver, arrow, text) and notes. Move, add, delete. |
+| Class diagram | Edit classes (members, name of a new class) and relations (ends, arrow, multiplicity, label). |
+| State diagram | Edit state descriptions and transitions (from, to, label). |
+| ER diagram | Edit entities (attributes with type, name, keys, comment) and relationships (ends, cardinality, line, label). |
+| Git graph | Edit commits (id, tag, type), branches, checkouts and merges. |
 
 Visual edits are applied to the code, which stays the single source of truth (they are undoable like typing).
 Flowcharts are parsed with Mermaid's own parser and written back as canonical code, so **comments inside the diagram are not kept** when you edit visually. Front matter and `%%{init}%%` directives are kept.
+
+Sequence, class, state, ER and git diagrams work line by line. The panel edits the lines it understands. Every other line (blocks such as `loop` or `alt`, notes, styles, comments, new syntax) stays exactly where it was, and a line you did not touch is not rewritten. Before a panel edit is applied, Mermaid checks the new code. If the result would be invalid (for example, you delete the first commit that a branch starts from), the edit is not applied and the panel says so.
 
 ## Develop
 
@@ -50,6 +57,7 @@ To add a language, add its code to every key in the JSON – the language list i
 src/lib/flowchart/   model, parser (Mermaid's db), serializer, pure editing operations
 src/lib/pie.ts       pie model
 src/lib/timeline.ts, quadrant.ts, mindmap.ts, journey.ts, gantt.ts  models, parsers, serializers
+src/lib/line-model.ts  base of the line-based editors; sequence.ts, class-diagram.ts, state.ts, er.ts, git-graph.ts use it
 src/lib/diagram-highlight.ts  highlighting for timeline, quadrant, class, state, ER and git (the CodeMirror Mermaid package has no grammar for them)
 src/lib/export.ts    SVG → PNG / SVG / clipboard
 src/components/      UI (shadcn/ui in components/ui), preview canvas, inspector panels

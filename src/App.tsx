@@ -22,7 +22,7 @@ import { labelToText, type FlowModel, type Selection } from "@/lib/flowchart/mod
 import { addEdge, addNode, groupItems, removeEdge, removeNode, ungroup, updateEdge, updateGroup, updateNode } from "@/lib/flowchart/ops";
 import { serializeFlowchart } from "@/lib/flowchart/serialize";
 import { useTranslate } from "@/lib/i18n";
-import type { DiagramTheme } from "@/lib/mermaid-runtime";
+import { getDiagram, type DiagramTheme } from "@/lib/mermaid-runtime";
 import { decodeShareHash, encodeShareHash } from "@/lib/share";
 import { DEFAULT_CODE, type Template } from "@/lib/templates";
 import { readRenderedColors } from "@/lib/svg-targets";
@@ -110,7 +110,24 @@ export function App() {
     [setFlow],
   );
 
-  const commitCode = useCallback((text: string) => editor.current?.replace(text), []);
+  /** True after the panel proposed code that Mermaid refuses. The code editor then keeps its old text. */
+  const [editRejected, setEditRejected] = useState(false);
+
+  // The notice is about the text it was shown for.
+  useEffect(() => setEditRejected(false), [code]);
+
+  const commitCode = useCallback(async (text: string, options?: { check?: boolean }) => {
+    if (options?.check) {
+      try {
+        await getDiagram(text);
+      } catch {
+        setEditRejected(true);
+        return;
+      }
+    }
+    setEditRejected(false);
+    editor.current?.replace(text);
+  }, []);
 
   // Drop the selection when its element no longer exists.
   useEffect(() => {
@@ -347,6 +364,7 @@ export function App() {
             selection={selection}
             selected={selected}
             hasError={error !== null}
+            editRejected={editRejected}
             focusToken={focusToken}
             onFlowChange={commitFlow}
             onCodeChange={commitCode}

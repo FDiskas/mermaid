@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,13 +39,15 @@ interface CommitFieldProps {
   step?: string;
   /** Accessible name for a field that has no visible label. */
   ariaLabel?: string;
+  /** Hint shown in an empty field. */
+  placeholder?: string;
 }
 
 /**
  * A text field that reports every edit, but ignores incoming prop changes while it has focus.
  * This stops the value being rewritten under the cursor when the diagram is re-parsed.
  */
-export function CommitField({ value, onCommit, multiline, id, type, className, focusToken, inputMode, step, ariaLabel }: CommitFieldProps) {
+export function CommitField({ value, onCommit, multiline, id, type, className, focusToken, inputMode, step, ariaLabel, placeholder }: CommitFieldProps) {
   const [draft, setDraft] = useState(value);
   const focused = useRef(false);
   const element = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
@@ -64,6 +66,7 @@ export function CommitField({ value, onCommit, multiline, id, type, className, f
   const shared = {
     id,
     "aria-label": ariaLabel,
+    placeholder,
     value: draft,
     onFocus: () => (focused.current = true),
     onBlur: () => {
@@ -144,5 +147,58 @@ export function AddButton({ children, onClick }: { children: ReactNode; onClick(
     <Button variant="outline" size="sm" className="w-full" onClick={onClick}>
       <Plus /> {children}
     </Button>
+  );
+}
+
+interface SelectFieldProps<Value extends string> {
+  value: Value;
+  options: { value: Value; label: string }[];
+  onChange(value: Value): void;
+  /** Accessible name, because the select has no visible label. */
+  ariaLabel: string;
+  className?: string;
+}
+
+/** A native select. It is small, works on touch screens and needs no popup. */
+export function SelectField<Value extends string>({ value, options, onChange, ariaLabel, className }: SelectFieldProps<Value>) {
+  // A value that is not in the list (a state the code editor wrote) is still shown, so the select never lies.
+  const shown = options.some((option) => option.value === value) ? options : [{ value, label: value }, ...options];
+  return (
+    <select
+      aria-label={ariaLabel}
+      value={value}
+      onChange={(event) => onChange(event.target.value as Value)}
+      className={cn(
+        "border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 h-8 min-w-0 rounded-md border bg-transparent px-2 text-sm shadow-xs outline-none focus-visible:ring-[3px]",
+        className,
+      )}
+    >
+      {shown.map((option) => (
+        <option key={option.value} value={option.value} className="bg-popover text-popover-foreground">
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+interface MoveButtonsProps {
+  canMoveUp: boolean;
+  canMoveDown: boolean;
+  upLabel: string;
+  downLabel: string;
+  onMove(step: -1 | 1): void;
+}
+
+export function MoveButtons({ canMoveUp, canMoveDown, upLabel, downLabel, onMove }: MoveButtonsProps) {
+  return (
+    <div className="flex shrink-0">
+      <Button variant="ghost" size="icon-sm" aria-label={upLabel} title={upLabel} disabled={!canMoveUp} onClick={() => onMove(-1)}>
+        <ChevronUp />
+      </Button>
+      <Button variant="ghost" size="icon-sm" aria-label={downLabel} title={downLabel} disabled={!canMoveDown} onClick={() => onMove(1)}>
+        <ChevronDown />
+      </Button>
+    </div>
   );
 }

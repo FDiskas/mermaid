@@ -944,12 +944,12 @@
     "ru": "Визуальные правки пересоздают код. Комментарии не сохраняются."
   },
   "unsupportedVisual": {
-    "en": "The visual editor supports flowcharts, pie charts, timelines, quadrant charts, mind maps, journeys and Gantt charts. Use the code editor for this diagram type.",
-    "lt": "Vizualinis redaktorius palaiko srautų, skritulines, laiko juostų, kvadrantų, minčių žemėlapių, kelionių ir Gantto diagramas. Šiam diagramos tipui naudokite kodo redaktorių.",
-    "es": "El editor visual admite diagramas de flujo, gráficos circulares, cronologías, gráficos de cuadrantes, mapas mentales, recorridos y diagramas de Gantt. Usa el editor de código para este tipo de diagrama.",
-    "fr": "L'éditeur visuel prend en charge les organigrammes, les camemberts, les chronologies, les diagrammes en quadrants, les cartes mentales, les parcours et les diagrammes de Gantt. Utilisez l'éditeur de code pour ce type de diagramme.",
-    "de": "Der visuelle Editor unterstützt Flussdiagramme, Kreisdiagramme, Zeitleisten, Quadrantendiagramme, Mindmaps, User Journeys und Gantt-Diagramme. Nutze für diesen Diagrammtyp den Code-Editor.",
-    "ru": "Визуальный редактор поддерживает блок-схемы, круговые диаграммы, хронологии, квадрантные диаграммы, ментальные карты, пользовательские пути и диаграммы Ганта. Для этого типа диаграмм используйте редактор кода."
+    "en": "This diagram type has no visual editor. Use the code editor.",
+    "lt": "Šis diagramos tipas neturi vizualinio redaktoriaus. Naudokite kodo redaktorių.",
+    "es": "Este tipo de diagrama no tiene editor visual. Usa el editor de código.",
+    "fr": "Ce type de diagramme n'a pas d'éditeur visuel. Utilisez l'éditeur de code.",
+    "de": "Für diesen Diagrammtyp gibt es keinen visuellen Editor. Nutze den Code-Editor.",
+    "ru": "Для этого типа диаграмм нет визуального редактора. Используйте редактор кода."
   },
   "fixSyntaxFirst": {
     "en": "Fix the syntax error to use the visual editor.",
@@ -1404,5 +1404,717 @@
     "fr": "Jalon",
     "de": "Meilenstein",
     "ru": "Веха"
+  },
+  "moveUp": {
+    "en": "Move up",
+    "lt": "Perkelti aukštyn",
+    "es": "Subir",
+    "fr": "Monter",
+    "de": "Nach oben",
+    "ru": "Вверх"
+  },
+  "moveDown": {
+    "en": "Move down",
+    "lt": "Perkelti žemyn",
+    "es": "Bajar",
+    "fr": "Descendre",
+    "de": "Nach unten",
+    "ru": "Вниз"
+  },
+  "editRejected": {
+    "en": "This change would make the diagram invalid, so it was not applied. Check the lines it affects in the code editor.",
+    "lt": "Šis pakeitimas padarytų diagramą netinkamą, todėl jis netaikytas. Patikrinkite paveiktas eilutes kodo redaktoriuje.",
+    "es": "Este cambio dejaría el diagrama no válido, así que no se aplicó. Revisa las líneas afectadas en el editor de código.",
+    "fr": "Cette modification rendrait le diagramme invalide ; elle n'a donc pas été appliquée. Vérifiez les lignes concernées dans l'éditeur de code.",
+    "de": "Diese Änderung würde das Diagramm ungültig machen und wurde deshalb nicht angewendet. Prüfe die betroffenen Zeilen im Code-Editor.",
+    "ru": "Это изменение сделало бы диаграмму недопустимой, поэтому оно не применено. Проверьте затронутые строки в редакторе кода."
+  },
+  "nameInUse": {
+    "en": "This name is used in other lines. Change it in the code editor.",
+    "lt": "Šis pavadinimas naudojamas kitose eilutėse. Keiskite jį kodo redaktoriuje.",
+    "es": "Este nombre se usa en otras líneas. Cámbialo en el editor de código.",
+    "fr": "Ce nom est utilisé dans d'autres lignes. Modifiez-le dans l'éditeur de code.",
+    "de": "Dieser Name wird in anderen Zeilen verwendet. Ändere ihn im Code-Editor.",
+    "ru": "Это имя используется в других строках. Измените его в редакторе кода."
+  },
+  "linkFrom": {
+    "en": "From",
+    "lt": "Nuo",
+    "es": "Desde",
+    "fr": "De",
+    "de": "Von",
+    "ru": "От"
+  },
+  "linkTo": {
+    "en": "To",
+    "lt": "Iki",
+    "es": "Hasta",
+    "fr": "Vers",
+    "de": "Nach",
+    "ru": "К"
+  },
+  "linkLabel": {
+    "en": "Label",
+    "lt": "Etiketė",
+    "es": "Etiqueta",
+    "fr": "Libellé",
+    "de": "Beschriftung",
+    "ru": "Подпись"
+  },
+  "participants": {
+    "en": "Participants",
+    "lt": "Dalyviai",
+    "es": "Participantes",
+    "fr": "Participants",
+    "de": "Teilnehmer",
+    "ru": "Участники"
+  },
+  "addParticipant": {
+    "en": "Add participant",
+    "lt": "Pridėti dalyvį",
+    "es": "Añadir participante",
+    "fr": "Ajouter un participant",
+    "de": "Teilnehmer hinzufügen",
+    "ru": "Добавить участника"
+  },
+  "kindParticipant": {
+    "en": "Participant",
+    "lt": "Dalyvis",
+    "es": "Participante",
+    "fr": "Participant",
+    "de": "Teilnehmer",
+    "ru": "Участник"
+  },
+  "kindActor": {
+    "en": "Actor",
+    "lt": "Veikėjas",
+    "es": "Actor",
+    "fr": "Acteur",
+    "de": "Akteur",
+    "ru": "Актор"
+  },
+  "participantLabel": {
+    "en": "Display name",
+    "lt": "Rodomas pavadinimas",
+    "es": "Nombre visible",
+    "fr": "Nom affiché",
+    "de": "Anzeigename",
+    "ru": "Отображаемое имя"
+  },
+  "messagesAndNotes": {
+    "en": "Messages and notes",
+    "lt": "Žinutės ir pastabos",
+    "es": "Mensajes y notas",
+    "fr": "Messages et notes",
+    "de": "Nachrichten und Notizen",
+    "ru": "Сообщения и заметки"
+  },
+  "addMessage": {
+    "en": "Add message",
+    "lt": "Pridėti žinutę",
+    "es": "Añadir mensaje",
+    "fr": "Ajouter un message",
+    "de": "Nachricht hinzufügen",
+    "ru": "Добавить сообщение"
+  },
+  "addNote": {
+    "en": "Add note",
+    "lt": "Pridėti pastabą",
+    "es": "Añadir nota",
+    "fr": "Ajouter une note",
+    "de": "Notiz hinzufügen",
+    "ru": "Добавить заметку"
+  },
+  "newMessageText": {
+    "en": "Message",
+    "lt": "Žinutė",
+    "es": "Mensaje",
+    "fr": "Message",
+    "de": "Nachricht",
+    "ru": "Сообщение"
+  },
+  "newNoteText": {
+    "en": "Note",
+    "lt": "Pastaba",
+    "es": "Nota",
+    "fr": "Note",
+    "de": "Notiz",
+    "ru": "Заметка"
+  },
+  "messageText": {
+    "en": "Message text",
+    "lt": "Žinutės tekstas",
+    "es": "Texto del mensaje",
+    "fr": "Texte du message",
+    "de": "Nachrichtentext",
+    "ru": "Текст сообщения"
+  },
+  "noteText": {
+    "en": "Note text",
+    "lt": "Pastabos tekstas",
+    "es": "Texto de la nota",
+    "fr": "Texte de la note",
+    "de": "Notiztext",
+    "ru": "Текст заметки"
+  },
+  "arrowType": {
+    "en": "Arrow",
+    "lt": "Rodyklė",
+    "es": "Flecha",
+    "fr": "Flèche",
+    "de": "Pfeil",
+    "ru": "Стрелка"
+  },
+  "notePlacement": {
+    "en": "Note position",
+    "lt": "Pastabos vieta",
+    "es": "Posición de la nota",
+    "fr": "Position de la note",
+    "de": "Position der Notiz",
+    "ru": "Положение заметки"
+  },
+  "noteActors": {
+    "en": "Participant IDs",
+    "lt": "Dalyvių ID",
+    "es": "ID de participantes",
+    "fr": "ID des participants",
+    "de": "Teilnehmer-IDs",
+    "ru": "ID участников"
+  },
+  "placeOver": {
+    "en": "Over",
+    "lt": "Virš",
+    "es": "Sobre",
+    "fr": "Au-dessus de",
+    "de": "Über",
+    "ru": "Над"
+  },
+  "placeRightOf": {
+    "en": "Right of",
+    "lt": "Dešinėje nuo",
+    "es": "A la derecha de",
+    "fr": "À droite de",
+    "de": "Rechts von",
+    "ru": "Справа от"
+  },
+  "placeLeftOf": {
+    "en": "Left of",
+    "lt": "Kairėje nuo",
+    "es": "A la izquierda de",
+    "fr": "À gauche de",
+    "de": "Links von",
+    "ru": "Слева от"
+  },
+  "arrowSolidHead": {
+    "en": "Solid, arrowhead",
+    "lt": "Ištisinė, su antgaliu",
+    "es": "Sólida, con punta",
+    "fr": "Pleine, avec pointe",
+    "de": "Durchgezogen, mit Spitze",
+    "ru": "Сплошная, со стрелкой"
+  },
+  "arrowDottedHead": {
+    "en": "Dotted, arrowhead",
+    "lt": "Punktyrinė, su antgaliu",
+    "es": "Punteada, con punta",
+    "fr": "Pointillée, avec pointe",
+    "de": "Gestrichelt, mit Spitze",
+    "ru": "Пунктир, со стрелкой"
+  },
+  "arrowSolidOpen": {
+    "en": "Solid, no head",
+    "lt": "Ištisinė, be antgalio",
+    "es": "Sólida, sin punta",
+    "fr": "Pleine, sans pointe",
+    "de": "Durchgezogen, ohne Spitze",
+    "ru": "Сплошная, без стрелки"
+  },
+  "arrowDottedOpen": {
+    "en": "Dotted, no head",
+    "lt": "Punktyrinė, be antgalio",
+    "es": "Punteada, sin punta",
+    "fr": "Pointillée, sans pointe",
+    "de": "Gestrichelt, ohne Spitze",
+    "ru": "Пунктир, без стрелки"
+  },
+  "arrowSolidCross": {
+    "en": "Solid, cross",
+    "lt": "Ištisinė, su kryžiuku",
+    "es": "Sólida, con cruz",
+    "fr": "Pleine, avec croix",
+    "de": "Durchgezogen, mit Kreuz",
+    "ru": "Сплошная, с крестом"
+  },
+  "arrowDottedCross": {
+    "en": "Dotted, cross",
+    "lt": "Punktyrinė, su kryžiuku",
+    "es": "Punteada, con cruz",
+    "fr": "Pointillée, avec croix",
+    "de": "Gestrichelt, mit Kreuz",
+    "ru": "Пунктир, с крестом"
+  },
+  "arrowSolidAsync": {
+    "en": "Solid, async",
+    "lt": "Ištisinė, asinchroninė",
+    "es": "Sólida, asíncrona",
+    "fr": "Pleine, asynchrone",
+    "de": "Durchgezogen, asynchron",
+    "ru": "Сплошная, асинхронная"
+  },
+  "arrowDottedAsync": {
+    "en": "Dotted, async",
+    "lt": "Punktyrinė, asinchroninė",
+    "es": "Punteada, asíncrona",
+    "fr": "Pointillée, asynchrone",
+    "de": "Gestrichelt, asynchron",
+    "ru": "Пунктир, асинхронная"
+  },
+  "states": {
+    "en": "States",
+    "lt": "Būsenos",
+    "es": "Estados",
+    "fr": "États",
+    "de": "Zustände",
+    "ru": "Состояния"
+  },
+  "addState": {
+    "en": "Add state",
+    "lt": "Pridėti būseną",
+    "es": "Añadir estado",
+    "fr": "Ajouter un état",
+    "de": "Zustand hinzufügen",
+    "ru": "Добавить состояние"
+  },
+  "newStateText": {
+    "en": "New state",
+    "lt": "Nauja būsena",
+    "es": "Nuevo estado",
+    "fr": "Nouvel état",
+    "de": "Neuer Zustand",
+    "ru": "Новое состояние"
+  },
+  "stateDescription": {
+    "en": "Description",
+    "lt": "Aprašymas",
+    "es": "Descripción",
+    "fr": "Description",
+    "de": "Beschreibung",
+    "ru": "Описание"
+  },
+  "transitions": {
+    "en": "Transitions",
+    "lt": "Perėjimai",
+    "es": "Transiciones",
+    "fr": "Transitions",
+    "de": "Übergänge",
+    "ru": "Переходы"
+  },
+  "addTransition": {
+    "en": "Add transition",
+    "lt": "Pridėti perėjimą",
+    "es": "Añadir transición",
+    "fr": "Ajouter une transition",
+    "de": "Übergang hinzufügen",
+    "ru": "Добавить переход"
+  },
+  "startEndState": {
+    "en": "Start / end",
+    "lt": "Pradžia / pabaiga",
+    "es": "Inicio / fin",
+    "fr": "Début / fin",
+    "de": "Start / Ende",
+    "ru": "Начало / конец"
+  },
+  "classes": {
+    "en": "Classes",
+    "lt": "Klasės",
+    "es": "Clases",
+    "fr": "Classes",
+    "de": "Klassen",
+    "ru": "Классы"
+  },
+  "addClass": {
+    "en": "Add class",
+    "lt": "Pridėti klasę",
+    "es": "Añadir clase",
+    "fr": "Ajouter une classe",
+    "de": "Klasse hinzufügen",
+    "ru": "Добавить класс"
+  },
+  "className": {
+    "en": "Class name",
+    "lt": "Klasės pavadinimas",
+    "es": "Nombre de la clase",
+    "fr": "Nom de la classe",
+    "de": "Klassenname",
+    "ru": "Имя класса"
+  },
+  "members": {
+    "en": "Members",
+    "lt": "Nariai",
+    "es": "Miembros",
+    "fr": "Membres",
+    "de": "Mitglieder",
+    "ru": "Члены"
+  },
+  "addMember": {
+    "en": "Add member",
+    "lt": "Pridėti narį",
+    "es": "Añadir miembro",
+    "fr": "Ajouter un membre",
+    "de": "Mitglied hinzufügen",
+    "ru": "Добавить член"
+  },
+  "memberText": {
+    "en": "Member",
+    "lt": "Narys",
+    "es": "Miembro",
+    "fr": "Membre",
+    "de": "Mitglied",
+    "ru": "Член"
+  },
+  "relations": {
+    "en": "Relations",
+    "lt": "Ryšiai",
+    "es": "Relaciones",
+    "fr": "Relations",
+    "de": "Beziehungen",
+    "ru": "Связи"
+  },
+  "addRelation": {
+    "en": "Add relation",
+    "lt": "Pridėti ryšį",
+    "es": "Añadir relación",
+    "fr": "Ajouter une relation",
+    "de": "Beziehung hinzufügen",
+    "ru": "Добавить связь"
+  },
+  "cardinalityFrom": {
+    "en": "Multiplicity at start",
+    "lt": "Kartotinumas pradžioje",
+    "es": "Multiplicidad al inicio",
+    "fr": "Multiplicité au début",
+    "de": "Multiplizität am Anfang",
+    "ru": "Кратность в начале"
+  },
+  "cardinalityTo": {
+    "en": "Multiplicity at end",
+    "lt": "Kartotinumas gale",
+    "es": "Multiplicidad al final",
+    "fr": "Multiplicité à la fin",
+    "de": "Multiplizität am Ende",
+    "ru": "Кратность в конце"
+  },
+  "relInheritance": {
+    "en": "Inheritance",
+    "lt": "Paveldėjimas",
+    "es": "Herencia",
+    "fr": "Héritage",
+    "de": "Vererbung",
+    "ru": "Наследование"
+  },
+  "relComposition": {
+    "en": "Composition",
+    "lt": "Kompozicija",
+    "es": "Composición",
+    "fr": "Composition",
+    "de": "Komposition",
+    "ru": "Композиция"
+  },
+  "relAggregation": {
+    "en": "Aggregation",
+    "lt": "Agregacija",
+    "es": "Agregación",
+    "fr": "Agrégation",
+    "de": "Aggregation",
+    "ru": "Агрегация"
+  },
+  "relAssociation": {
+    "en": "Association",
+    "lt": "Asociacija",
+    "es": "Asociación",
+    "fr": "Association",
+    "de": "Assoziation",
+    "ru": "Ассоциация"
+  },
+  "relDependency": {
+    "en": "Dependency",
+    "lt": "Priklausomybė",
+    "es": "Dependencia",
+    "fr": "Dépendance",
+    "de": "Abhängigkeit",
+    "ru": "Зависимость"
+  },
+  "relRealization": {
+    "en": "Realization",
+    "lt": "Realizacija",
+    "es": "Realización",
+    "fr": "Réalisation",
+    "de": "Realisierung",
+    "ru": "Реализация"
+  },
+  "relLink": {
+    "en": "Link (solid)",
+    "lt": "Ryšys (ištisinis)",
+    "es": "Enlace (sólido)",
+    "fr": "Lien (plein)",
+    "de": "Verbindung (durchgezogen)",
+    "ru": "Связь (сплошная)"
+  },
+  "relDashedLink": {
+    "en": "Link (dashed)",
+    "lt": "Ryšys (punktyrinis)",
+    "es": "Enlace (discontinuo)",
+    "fr": "Lien (pointillé)",
+    "de": "Verbindung (gestrichelt)",
+    "ru": "Связь (пунктир)"
+  },
+  "entities": {
+    "en": "Entities",
+    "lt": "Esybės",
+    "es": "Entidades",
+    "fr": "Entités",
+    "de": "Entitäten",
+    "ru": "Сущности"
+  },
+  "addEntity": {
+    "en": "Add entity",
+    "lt": "Pridėti esybę",
+    "es": "Añadir entidad",
+    "fr": "Ajouter une entité",
+    "de": "Entität hinzufügen",
+    "ru": "Добавить сущность"
+  },
+  "entityName": {
+    "en": "Entity name",
+    "lt": "Esybės pavadinimas",
+    "es": "Nombre de la entidad",
+    "fr": "Nom de l'entité",
+    "de": "Entitätsname",
+    "ru": "Имя сущности"
+  },
+  "attributes": {
+    "en": "Attributes",
+    "lt": "Atributai",
+    "es": "Atributos",
+    "fr": "Attributs",
+    "de": "Attribute",
+    "ru": "Атрибуты"
+  },
+  "addAttribute": {
+    "en": "Add attribute",
+    "lt": "Pridėti atributą",
+    "es": "Añadir atributo",
+    "fr": "Ajouter un attribut",
+    "de": "Attribut hinzufügen",
+    "ru": "Добавить атрибут"
+  },
+  "attributeType": {
+    "en": "Type",
+    "lt": "Tipas",
+    "es": "Tipo",
+    "fr": "Type",
+    "de": "Typ",
+    "ru": "Тип"
+  },
+  "attributeName": {
+    "en": "Name",
+    "lt": "Pavadinimas",
+    "es": "Nombre",
+    "fr": "Nom",
+    "de": "Name",
+    "ru": "Имя"
+  },
+  "attributeKeys": {
+    "en": "Keys (PK, FK, UK)",
+    "lt": "Raktai (PK, FK, UK)",
+    "es": "Claves (PK, FK, UK)",
+    "fr": "Clés (PK, FK, UK)",
+    "de": "Schlüssel (PK, FK, UK)",
+    "ru": "Ключи (PK, FK, UK)"
+  },
+  "attributeComment": {
+    "en": "Comment",
+    "lt": "Komentaras",
+    "es": "Comentario",
+    "fr": "Commentaire",
+    "de": "Kommentar",
+    "ru": "Комментарий"
+  },
+  "erExactlyOne": {
+    "en": "Exactly one",
+    "lt": "Lygiai vienas",
+    "es": "Exactamente uno",
+    "fr": "Exactement un",
+    "de": "Genau eins",
+    "ru": "Ровно один"
+  },
+  "erZeroOrOne": {
+    "en": "Zero or one",
+    "lt": "Nulis arba vienas",
+    "es": "Cero o uno",
+    "fr": "Zéro ou un",
+    "de": "Null oder eins",
+    "ru": "Ноль или один"
+  },
+  "erOneOrMore": {
+    "en": "One or more",
+    "lt": "Vienas ar daugiau",
+    "es": "Uno o más",
+    "fr": "Un ou plusieurs",
+    "de": "Eins oder mehr",
+    "ru": "Один или больше"
+  },
+  "erZeroOrMore": {
+    "en": "Zero or more",
+    "lt": "Nulis ar daugiau",
+    "es": "Cero o más",
+    "fr": "Zéro ou plusieurs",
+    "de": "Null oder mehr",
+    "ru": "Ноль или больше"
+  },
+  "erIdentifying": {
+    "en": "Identifying (solid)",
+    "lt": "Identifikuojantis (ištisinis)",
+    "es": "Identificadora (sólida)",
+    "fr": "Identifiante (pleine)",
+    "de": "Identifizierend (durchgezogen)",
+    "ru": "Идентифицирующая (сплошная)"
+  },
+  "erNonIdentifying": {
+    "en": "Non-identifying (dashed)",
+    "lt": "Neidentifikuojantis (punktyrinis)",
+    "es": "No identificadora (discontinua)",
+    "fr": "Non identifiante (pointillée)",
+    "de": "Nicht identifizierend (gestrichelt)",
+    "ru": "Неидентифицирующая (пунктир)"
+  },
+  "relationLine": {
+    "en": "Line",
+    "lt": "Linija",
+    "es": "Línea",
+    "fr": "Ligne",
+    "de": "Linie",
+    "ru": "Линия"
+  },
+  "gitCommit": {
+    "en": "Commit",
+    "lt": "Commit",
+    "es": "Commit",
+    "fr": "Commit",
+    "de": "Commit",
+    "ru": "Коммит"
+  },
+  "gitBranch": {
+    "en": "Branch",
+    "lt": "Šaka",
+    "es": "Rama",
+    "fr": "Branche",
+    "de": "Branch",
+    "ru": "Ветка"
+  },
+  "gitCheckout": {
+    "en": "Checkout",
+    "lt": "Perjungti",
+    "es": "Cambiar",
+    "fr": "Basculer",
+    "de": "Wechseln",
+    "ru": "Переключить"
+  },
+  "gitMerge": {
+    "en": "Merge",
+    "lt": "Sujungti",
+    "es": "Fusionar",
+    "fr": "Fusionner",
+    "de": "Zusammenführen",
+    "ru": "Слияние"
+  },
+  "addCommit": {
+    "en": "Add commit",
+    "lt": "Pridėti commit",
+    "es": "Añadir commit",
+    "fr": "Ajouter un commit",
+    "de": "Commit hinzufügen",
+    "ru": "Добавить коммит"
+  },
+  "addBranch": {
+    "en": "Add branch",
+    "lt": "Pridėti šaką",
+    "es": "Añadir rama",
+    "fr": "Ajouter une branche",
+    "de": "Branch hinzufügen",
+    "ru": "Добавить ветку"
+  },
+  "addCheckout": {
+    "en": "Add checkout",
+    "lt": "Pridėti perjungimą",
+    "es": "Añadir cambio de rama",
+    "fr": "Ajouter un basculement",
+    "de": "Wechsel hinzufügen",
+    "ru": "Добавить переключение"
+  },
+  "addMerge": {
+    "en": "Add merge",
+    "lt": "Pridėti sujungimą",
+    "es": "Añadir fusión",
+    "fr": "Ajouter une fusion",
+    "de": "Merge hinzufügen",
+    "ru": "Добавить слияние"
+  },
+  "gitCommands": {
+    "en": "Commands",
+    "lt": "Komandos",
+    "es": "Comandos",
+    "fr": "Commandes",
+    "de": "Befehle",
+    "ru": "Команды"
+  },
+  "commitId": {
+    "en": "ID",
+    "lt": "ID",
+    "es": "ID",
+    "fr": "ID",
+    "de": "ID",
+    "ru": "ID"
+  },
+  "commitTag": {
+    "en": "Tag",
+    "lt": "Žyma",
+    "es": "Etiqueta",
+    "fr": "Tag",
+    "de": "Tag",
+    "ru": "Тег"
+  },
+  "commitNormal": {
+    "en": "Normal",
+    "lt": "Įprastas",
+    "es": "Normal",
+    "fr": "Normal",
+    "de": "Normal",
+    "ru": "Обычный"
+  },
+  "commitReverse": {
+    "en": "Reverse",
+    "lt": "Atvirkštinis",
+    "es": "Inverso",
+    "fr": "Inversé",
+    "de": "Umgekehrt",
+    "ru": "Обратный"
+  },
+  "commitHighlight": {
+    "en": "Highlight",
+    "lt": "Paryškintas",
+    "es": "Destacado",
+    "fr": "Mis en évidence",
+    "de": "Hervorgehoben",
+    "ru": "Выделенный"
+  },
+  "branchName": {
+    "en": "Branch name",
+    "lt": "Šakos pavadinimas",
+    "es": "Nombre de la rama",
+    "fr": "Nom de la branche",
+    "de": "Branchname",
+    "ru": "Имя ветки"
   }
 }

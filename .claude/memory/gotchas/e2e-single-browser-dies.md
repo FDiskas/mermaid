@@ -10,3 +10,5 @@ All blocks passed when run alone but a single long run died partway with "Target
 
 ### How to apply
 `e2e/run.mjs` starts one process per block (`ONLY=<block>`). After a download or menu action, wait for `[role=menu]` to detach before the next click. Treat a "Target closed" after about 30 s as a stuck step, not a crash.
+
+The blocks `diagrams`, `line-editors` and `templates` are separate for this reason: adding more checks to one block made its last checks die with "Target closed" (2026-11-23).
