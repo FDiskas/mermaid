@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import type { FlowModel, Selection } from "@/lib/flowchart/model";
 import type { DiagramKind } from "@/lib/diagram-type";
 import { useTranslate } from "@/lib/i18n";
+import type { FocusState } from "@/lib/focus";
 import { FlowInspector } from "./FlowInspector";
+import { FocusContext } from "./focus";
 import { VISUAL_EDITORS } from "./visual-editors";
 
 interface Props {
@@ -18,6 +20,9 @@ interface Props {
   /** The last edit in a panel would have made the diagram invalid, so it was not applied. */
   editRejected: boolean;
   focusToken: number;
+  /** The item in focus, for the diagram types that mark items (see `lib/focus`). */
+  focus: FocusState | null;
+  onFocus(key: string): void;
   onFlowChange(model: FlowModel, nextSelection?: Selection): void;
   /** `check` asks Mermaid to confirm the new code before it replaces the old one. */
   onCodeChange(code: string, options?: { check?: boolean }): void;
@@ -58,7 +63,9 @@ export function Inspector(props: Props) {
           {t.editRejected}
         </p>
       )}
-      <div className="min-h-0 flex-1 overflow-y-auto">{body}</div>
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <FocusContext.Provider value={{ focus: props.focus, onFocus: props.onFocus }}>{body}</FocusContext.Provider>
+      </div>
     </aside>
   );
 }

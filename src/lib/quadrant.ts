@@ -29,13 +29,14 @@ const INDENT = "    ";
 /** Written in place of an empty name, so the line keeps its meaning when the code is parsed again. */
 const EMPTY_NAME = "…";
 
-const POINT = /^(.+?)\s*:\s*\[\s*(-?\d*\.?\d+)\s*,\s*(-?\d*\.?\d+)\s*\]\s*(.*)$/;
-const AXIS = /^(x-axis|y-axis)\s+(.*)$/;
-const QUADRANT_NAME = /^quadrant-([1-4])\s+(.*)$/;
+export const POINT = /^(.+?)\s*:\s*\[\s*(-?\d*\.?\d+)\s*,\s*(-?\d*\.?\d+)\s*\]\s*(.*)$/;
+export const AXIS = /^(x-axis|y-axis)\s+(.*)$/;
+export const QUADRANT_NAME = /^quadrant-([1-4])\s+(.*)$/;
+export const TITLE_LINE = /^title\s+(.*)$/;
 
 const clampUnit = (value: number) => (Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0);
 
-function splitAxis(text: string): [string, string] {
+export function splitAxis(text: string): [string, string] {
   const [first = "", ...rest] = text.split("-->");
   return [first.trim(), rest.join("-->").trim()];
 }
@@ -60,7 +61,7 @@ export function parseQuadrant(code: string): QuadrantModel | null {
   for (const raw of lines.slice(header + 1)) {
     const line = raw.trim();
     if (line === "") continue;
-    const title = /^title\s+(.*)$/.exec(line);
+    const title = TITLE_LINE.exec(line);
     const axis = AXIS.exec(line);
     const quadrant = QUADRANT_NAME.exec(line);
     const point = line.startsWith("%%") ? null : POINT.exec(line);

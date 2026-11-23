@@ -17,6 +17,7 @@ import {
   type RelationArrow,
 } from "@/lib/class-diagram";
 import { AddButton, CommitField, DeleteButton, MoveButtons, SelectField, Section } from "./fields";
+import { FocusRow } from "./focus";
 
 interface Props {
   model: ClassModel;
@@ -57,7 +58,7 @@ export function ClassInspector({ model, onChange }: Props) {
   const classCard = (entry: ClassBlock, index: number) => {
     const setMembers = (members: string[]) => onChange(updateClass(model, index, { members }));
     return (
-      <li key={index} className="space-y-2 rounded-md border p-2" data-testid="class-item">
+      <FocusRow key={index} focusKey={String(index)} className="space-y-2 rounded-md border p-2" data-testid="class-item">
         <div className="flex items-center gap-1">
           {canRename(model, index) ? (
             <CommitField className="flex-1 font-medium" ariaLabel={t.className} value={entry.name} onCommit={(name) => onChange(renameClass(model, index, name))} />
@@ -75,14 +76,14 @@ export function ClassInspector({ model, onChange }: Props) {
           </div>
         ))}
         <AddButton onClick={() => setMembers([...entry.members, "+member"])}>{t.addMember}</AddButton>
-      </li>
+      </FocusRow>
     );
   };
 
   const relationCard = (entry: Relation, index: number) => {
     const patch = (change: Partial<Relation>) => onChange(updateRelation(model, index, change));
     return (
-      <li key={index} className="space-y-2 rounded-md border p-2" data-testid="class-relation">
+      <FocusRow key={index} focusKey={String(index)} className="space-y-2 rounded-md border p-2" data-testid="class-relation">
         <div className="flex items-center gap-1">
           <SelectField className="min-w-0 flex-1" ariaLabel={t.linkFrom} value={entry.from} options={nameOptions} onChange={(from) => patch({ from })} />
           <SelectField className="min-w-0 flex-1" ariaLabel={t.linkTo} value={entry.to} options={nameOptions} onChange={(to) => patch({ to })} />
@@ -96,7 +97,7 @@ export function ClassInspector({ model, onChange }: Props) {
           <CommitField className="min-w-0 flex-1" ariaLabel={t.linkLabel} placeholder={t.linkLabel} value={entry.label} onCommit={(label) => patch({ label })} />
           <CommitField className="w-14" ariaLabel={t.cardinalityTo} placeholder="*" value={entry.toCardinality} onCommit={(toCardinality) => patch({ toCardinality })} />
         </div>
-      </li>
+      </FocusRow>
     );
   };
 

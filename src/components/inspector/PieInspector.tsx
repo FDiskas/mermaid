@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useTranslate } from "@/lib/i18n";
 import type { PieModel } from "@/lib/pie";
+import { sliceKey } from "@/lib/focus/pie";
 import { CommitField, Field, Section } from "./fields";
+import { FocusRow } from "./focus";
 
 interface Props {
   model: PieModel;
@@ -29,7 +31,7 @@ export function PieInspector({ model, onChange }: Props) {
       <Section title={t.slices}>
         <ul className="space-y-2">
           {model.slices.map((slice, index) => (
-            <li key={index} className="flex items-center gap-2" data-testid="pie-slice">
+            <FocusRow key={index} focusKey={sliceKey(index)} className="flex items-center gap-2 rounded-md" data-testid="pie-slice">
               <CommitField className="flex-1" value={slice.label} onCommit={(label) => setSlice(index, { label })} />
               <CommitField
                 className="w-20"
@@ -50,7 +52,7 @@ export function PieInspector({ model, onChange }: Props) {
               >
                 <Trash2 />
               </Button>
-            </li>
+            </FocusRow>
           ))}
         </ul>
         <Button variant="outline" size="sm" className="w-full" onClick={() => onChange({ ...model, slices: [...model.slices, { label: t.newNodeLabel, value: 10 }] })}>

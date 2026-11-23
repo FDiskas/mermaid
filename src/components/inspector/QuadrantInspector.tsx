@@ -1,6 +1,8 @@
+import { QUADRANT_TITLE_KEY, axisKey, pointKey, quadrantKey, type AxisEnd } from "@/lib/focus/quadrant";
 import { useTranslate } from "@/lib/i18n";
 import type { QuadrantModel, QuadrantPoint } from "@/lib/quadrant";
 import { AddButton, CommitField, DeleteButton, Field, Section } from "./fields";
+import { FocusRow } from "./focus";
 
 interface Props {
   model: QuadrantModel;
@@ -18,7 +20,7 @@ export function QuadrantInspector({ model, onChange }: Props) {
   const setPoint = (index: number, patch: Partial<QuadrantPoint>) =>
     set({ points: model.points.map((point, i) => (i === index ? { ...point, ...patch } : point)) });
 
-  const axes: { label: string; key: "xLeft" | "xRight" | "yBottom" | "yTop" }[] = [
+  const axes: { label: string; key: AxisEnd }[] = [
     { label: t.xAxisLeft, key: "xLeft" },
     { label: t.xAxisRight, key: "xRight" },
     { label: t.yAxisBottom, key: "yBottom" },
@@ -45,28 +47,34 @@ export function QuadrantInspector({ model, onChange }: Props) {
   return (
     <div data-testid="quadrant-inspector">
       <Section>
-        <Field label={t.diagramTitle} htmlFor="quadrant-title">
-          <CommitField id="quadrant-title" value={model.title} onCommit={(title) => set({ title })} />
-        </Field>
+        <FocusRow as="div" focusKey={QUADRANT_TITLE_KEY} className="rounded-md">
+          <Field label={t.diagramTitle} htmlFor="quadrant-title">
+            <CommitField id="quadrant-title" value={model.title} onCommit={(title) => set({ title })} />
+          </Field>
+        </FocusRow>
       </Section>
       <Section title={t.axesTitle}>
         {axes.map(({ label, key }) => (
-          <Field key={key} label={label}>
-            <CommitField ariaLabel={label} value={model[key]} onCommit={(text) => set({ [key]: text })} />
-          </Field>
+          <FocusRow as="div" key={key} focusKey={axisKey(key)} className="rounded-md">
+            <Field label={label}>
+              <CommitField ariaLabel={label} value={model[key]} onCommit={(text) => set({ [key]: text })} />
+            </Field>
+          </FocusRow>
         ))}
       </Section>
       <Section title={t.quadrantsTitle}>
         {quadrantLabels.map((label, index) => (
-          <Field key={index} label={label}>
-            <CommitField ariaLabel={label} value={model.quadrants[index] ?? ""} onCommit={(text) => setQuadrant(index, text)} />
-          </Field>
+          <FocusRow as="div" key={index} focusKey={quadrantKey(index)} className="rounded-md">
+            <Field label={label}>
+              <CommitField ariaLabel={label} value={model.quadrants[index] ?? ""} onCommit={(text) => setQuadrant(index, text)} />
+            </Field>
+          </FocusRow>
         ))}
       </Section>
       <Section title={t.pointsTitle}>
         <ul className="space-y-3">
           {model.points.map((point, index) => (
-            <li key={index} className="space-y-1.5 rounded-md border p-2" data-testid="quadrant-point">
+            <FocusRow key={index} focusKey={pointKey(index)} className="space-y-1.5 rounded-md border p-2" data-testid="quadrant-point">
               <div className="flex items-center gap-2">
                 <CommitField className="flex-1" ariaLabel={t.nameLabel} value={point.name} onCommit={(name) => setPoint(index, { name })} />
                 <DeleteButton label={t.delete} onClick={() => set({ points: model.points.filter((_, i) => i !== index) })} />
@@ -75,7 +83,7 @@ export function QuadrantInspector({ model, onChange }: Props) {
                 {coordinateField(point, index, "x", t.pointX)}
                 {coordinateField(point, index, "y", t.pointY)}
               </div>
-            </li>
+            </FocusRow>
           ))}
         </ul>
         <AddButton onClick={() => set({ points: [...model.points, { name: t.newNodeLabel, x: NEW_POINT_POSITION, y: NEW_POINT_POSITION, style: "" }] })}>{t.addPoint}</AddButton>

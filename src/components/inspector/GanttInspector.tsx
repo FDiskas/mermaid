@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useTranslate } from "@/lib/i18n";
+import { ganttSectionKey, ganttTaskKey } from "@/lib/focus/gantt";
 import { GANTT_TAGS, type GanttModel, type GanttTag, type GanttTask } from "@/lib/gantt";
 import { AddButton, CommitField, DeleteButton, Field, Section } from "./fields";
+import { FocusRow } from "./focus";
 import { SectionList } from "./SectionList";
 
 interface Props {
@@ -35,7 +37,10 @@ export function GanttInspector({ model, onChange }: Props) {
         onChange={(sections) => onChange({ ...model, sections })}
         createSection={(title) => ({ title, tasks: [newTask()] })}
         addFirstItemLabel={t.addTask}
+        titleFocusKey={ganttSectionKey}
         renderBody={(section, replace) => {
+          // Tasks are keyed by their place among all tasks of the diagram, not by their place in the section.
+          const firstTask = model.sections.slice(0, model.sections.indexOf(section)).reduce((count, earlier) => count + earlier.tasks.length, 0);
           const patchTask = (index: number, patch: Partial<GanttTask>) =>
             replace({ ...section, tasks: section.tasks.map((task, i) => (i === index ? { ...task, ...patch } : task)) });
           const toggleTag = (index: number, tag: GanttTag) => {
@@ -47,7 +52,7 @@ export function GanttInspector({ model, onChange }: Props) {
             <>
               <ul className="space-y-3">
                 {section.tasks.map((task, index) => (
-                  <li key={index} className="space-y-2 rounded-md border p-2" data-testid="gantt-task">
+                  <FocusRow key={index} focusKey={ganttTaskKey(firstTask + index)} className="space-y-2 rounded-md border p-2" data-testid="gantt-task">
                     <div className="flex items-center gap-2">
                       <CommitField className="flex-1" ariaLabel={t.taskName} value={task.name} onCommit={(name) => patchTask(index, { name })} />
                       <DeleteButton label={t.delete} onClick={() => replace({ ...section, tasks: section.tasks.filter((_, i) => i !== index) })} />
@@ -70,7 +75,7 @@ export function GanttInspector({ model, onChange }: Props) {
                         </Button>
                       ))}
                     </div>
-                  </li>
+                  </FocusRow>
                 ))}
               </ul>
               <AddButton onClick={() => replace({ ...section, tasks: [...section.tasks, newTask()] })}>{t.addTask}</AddButton>

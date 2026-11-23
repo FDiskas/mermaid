@@ -1,7 +1,7 @@
 import { BookOpen, Code2, Eye, History, Link2, Maximize2, Minimize2, PanelRight, Redo2, RefreshCw, Undo2, ZoomIn, ZoomOut } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AboutDialog } from "@/components/AboutDialog";
-import { CodeEditor, type CodeEditorHandle } from "@/components/CodeEditor";
+import { CodeEditor, type CodeEditorHandle, type CursorPosition } from "@/components/CodeEditor";
 import { ExportMenu } from "@/components/ExportMenu";
 import { Flash, useFlash } from "@/components/Flash";
 import { Header } from "@/components/Header";
@@ -21,6 +21,8 @@ import { detectDiagramKind } from "@/lib/diagram-type";
 import { labelToText, type FlowModel, type Selection } from "@/lib/flowchart/model";
 import { addEdge, addNode, groupItems, removeEdge, removeNode, ungroup, updateEdge, updateGroup, updateNode } from "@/lib/flowchart/ops";
 import { serializeFlowchart } from "@/lib/flowchart/serialize";
+import { FOCUS_ADAPTERS, itemAtLine, itemByKey, type FocusSource, type FocusState } from "@/lib/focus";
+import { flowchartLines, flowchartSelectionAt } from "@/lib/focus/flowchart";
 import { useTranslate } from "@/lib/i18n";
 import { getDiagram, type DiagramTheme } from "@/lib/mermaid-runtime";
 import { decodeShareHash, encodeShareHash } from "@/lib/share";
@@ -48,6 +50,10 @@ export function App() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [selected, setSelected] = useState<NonNullable<Selection>[]>([]);
+  /** The item in focus in a diagram type other than a flowchart (see `lib/focus`). */
+  const [focus, setFocus] = useState<FocusState | null>(null);
+  /** Where the last flowchart selection came from. The code editor scrolls to it unless it came from the editor itself. */
+  const [selectionSource, setSelectionSource] = useState<FocusSource>("preview");
   const [connect, setConnect] = useState<{ source: string | null } | null>(null);
   const [fitToken, setFitToken] = useState(0);
   const [focusToken, setFocusToken] = useState(0);
@@ -70,6 +76,10 @@ export function App() {
   const { rendered, error } = useDiagram(code, diagramTheme);
   const [flow, setFlow] = useFlowModel(code, kind === "flowchart");
   const snapshots = useSnapshots(code);
+
+  const focusAdapter = FOCUS_ADAPTERS[kind];
+  const focusItems = useMemo(() => focusAdapter?.items(code) ?? [], [focusAdapter, code]);
+  const focusedItem = itemByKey(focusItems, focus?.key ?? null);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -97,6 +107,7 @@ export function App() {
     editor.current?.replace(text, { isolate: true });
     setCode(text);
     setSelection(null);
+    setFocus(null);
     setConnect(null);
     setFitToken((n) => n + 1);
   }
@@ -105,7 +116,10 @@ export function App() {
     (next: FlowModel, nextSelection?: Selection) => {
       setFlow(next);
       editor.current?.replace(serializeFlowchart(next));
-      if (nextSelection !== undefined) setSelection(nextSelection);
+      if (nextSelection !== undefined) {
+        setSelectionSource("panel");
+        setSelection(nextSelection);
+      }
     },
     [setFlow],
   );
@@ -144,9 +158,58 @@ export function App() {
       setSelection(null);
       setConnect(null);
     }
+    setFocus(null);
   }, [kind]);
 
+  // The focus goes when its item is gone (a row was deleted).
+  useEffect(() => {
+    if (focus && !focusedItem) setFocus(null);
+  }, [focus, focusedItem]);
+
   const editable = kind === "flowchart" && flow !== null && inspectorOpen;
+
+  /** The lines of the code editor that belong to what is selected (flowchart) or in focus (other diagrams). */
+  const focusedLines = useMemo(() => {
+    if (kind === "flowchart") {
+      if (!editable || !flow) return [];
+      return selected.flatMap((item) => flowchartLines(code, flow, item));
+    }
+    if (!focusedItem) return [];
+    return Array.from({ length: focusedItem.to - focusedItem.from + 1 }, (_, offset) => focusedItem.from + offset);
+  }, [kind, editable, flow, selected, code, focusedItem]);
+
+  const focusSource = kind === "flowchart" ? selectionSource : focus?.source;
+
+  const locateFocus = useMemo(() => {
+    if (!focusAdapter || !focus) return null;
+    return (root: SVGSVGElement) => focusAdapter.locate(root, focusItems, focus.key);
+  }, [focusAdapter, focusItems, focus]);
+
+  const pickFocus = useMemo(() => {
+    if (!focusAdapter) return null;
+    return (target: Element) => {
+      const root = target.closest("svg");
+      const key = root ? focusAdapter.pick(root, focusItems, target) : null;
+      setFocus(key ? { key, source: "preview" } : null);
+    };
+  }, [focusAdapter, focusItems]);
+
+  const focusFromPanel = useCallback((key: string) => setFocus((current) => (current?.key === key ? current : { key, source: "panel" })), []);
+
+  /** The cursor of the code editor moved: what it is on is now in focus. */
+  const followCursor = ({ line, column }: CursorPosition) => {
+    if (kind === "flowchart") {
+      if (!editable || !flow) return;
+      const next = flowchartSelectionAt(code, flow, line, column);
+      const same = selected.length === (next ? 1 : 0) && (!next || (selected[0]?.kind === next.kind && selected[0]?.id === next.id));
+      if (same) return;
+      setSelectionSource("code");
+      setSelection(next);
+      return;
+    }
+    const item = itemAtLine(focusItems, line);
+    setFocus((current) => (item ? (current?.key === item.key ? current : { key: item.key, source: "code" }) : null));
+  };
 
   const addNewNode = useCallback(() => {
     if (!flow) return;
@@ -199,6 +262,7 @@ export function App() {
         return;
       }
     }
+    setSelectionSource("preview");
     setSelection(next);
     if (next) setFocusToken(0);
   };
@@ -314,6 +378,8 @@ export function App() {
             connecting={connect !== null}
             fitToken={fitToken}
             dimmed={error !== null}
+            locateFocus={locateFocus}
+            onPick={pickFocus}
             onSelect={handleSelect}
             getLabel={labelOf}
             onCommitLabel={commitLabel}
@@ -366,6 +432,8 @@ export function App() {
             hasError={error !== null}
             editRejected={editRejected}
             focusToken={focusToken}
+            focus={focus}
+            onFocus={focusFromPanel}
             onFlowChange={commitFlow}
             onCodeChange={commitCode}
             onStartConnect={(source) => setConnect({ source })}
@@ -423,7 +491,17 @@ export function App() {
               </Button>
             </div>
             <div className="min-h-0 flex-1">
-              <CodeEditor ref={editor} value={code} onChange={setCode} dark={dark} error={error} onHistoryChange={setUndoState} />
+              <CodeEditor
+                ref={editor}
+                value={code}
+                onChange={setCode}
+                dark={dark}
+                error={error}
+                onHistoryChange={setUndoState}
+                focusedLines={focusedLines}
+                revealFocus={focusSource !== undefined && focusSource !== "code"}
+                onCursorChange={followCursor}
+              />
             </div>
             <div className="text-muted-foreground border-t px-3 py-1.5 text-xs">{t.savedLocally}</div>
           </section>

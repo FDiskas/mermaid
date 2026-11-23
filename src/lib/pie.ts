@@ -15,7 +15,7 @@ export interface PieModel {
   extra: string[];
 }
 
-const SLICE = /^\s*(?:"([^"]*)"|'([^']*)')\s*:\s*(-?\d+(?:\.\d+)?)\s*$/;
+export const SLICE = /^\s*(?:"([^"]*)"|'([^']*)')\s*:\s*(-?\d+(?:\.\d+)?)\s*$/;
 
 export function parsePie(code: string): PieModel | null {
   const lines = code.split(/\r?\n/);

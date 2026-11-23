@@ -49,12 +49,28 @@ g.cluster.mv-selected > rect {
   stroke: #3b82f6 !important;
   stroke-width: 3px !important;
 }
+.mv-selected {
+  filter: drop-shadow(0 0 2px #3b82f6) drop-shadow(0 0 6px rgb(59 130 246 / 0.9));
+}
 .mv-connect-source :is(rect, path, polygon, circle, ellipse):not(.background, .arrowMarkerPath, .label *) {
   stroke: #10b981 !important;
   stroke-width: 3px !important;
 }
 .mv-connecting g.node:hover :is(rect, path, polygon, circle, ellipse):not(.background, .arrowMarkerPath, .label *) {
   stroke: #10b981 !important;
+  stroke-width: 3px !important;
+}
+
+/* The item in focus in diagrams that are not flowcharts: a glow around what it draws, a thick outline on its shapes. */
+.mv-pickable {
+  cursor: pointer;
+}
+.mv-focus {
+  filter: drop-shadow(0 0 2px #3b82f6) drop-shadow(0 0 6px rgb(59 130 246 / 0.9));
+}
+.mv-focus :is(rect, path, polygon, circle, ellipse):not(.background, .arrowMarkerPath),
+:is(rect, path, polygon, circle, ellipse, line).mv-focus {
+  stroke: #3b82f6 !important;
   stroke-width: 3px !important;
 }
 

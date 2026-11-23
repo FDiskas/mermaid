@@ -22,6 +22,7 @@ import {
   type RightCardinality,
 } from "@/lib/er";
 import { AddButton, CommitField, DeleteButton, MoveButtons, SelectField, Section } from "./fields";
+import { FocusRow } from "./focus";
 
 interface Props {
   model: ErModel;
@@ -51,7 +52,7 @@ export function ErInspector({ model, onChange }: Props) {
     const setAttributes = (attributes: Attribute[]) => onChange(updateEntity(model, index, { attributes }));
     const patchAttribute = (position: number, change: Partial<Attribute>) => setAttributes(entry.attributes.map((attribute, i) => (i === position ? { ...attribute, ...change } : attribute)));
     return (
-      <li key={index} className="space-y-2 rounded-md border p-2" data-testid="er-entity">
+      <FocusRow key={index} focusKey={String(index)} className="space-y-2 rounded-md border p-2" data-testid="er-entity">
         <div className="flex items-center gap-1">
           {canRename(model, index) ? (
             <CommitField className="flex-1 font-medium" ariaLabel={t.entityName} value={entry.name} onCommit={(name) => onChange(renameEntity(model, index, name))} />
@@ -76,14 +77,14 @@ export function ErInspector({ model, onChange }: Props) {
           </div>
         ))}
         <AddButton onClick={() => setAttributes([...entry.attributes, newAttribute(NEW_ENTITY_ATTRIBUTE)])}>{t.addAttribute}</AddButton>
-      </li>
+      </FocusRow>
     );
   };
 
   const relationshipCard = (entry: Relationship, index: number) => {
     const patch = (change: Partial<Relationship>) => onChange(updateRelationship(model, index, change));
     return (
-      <li key={index} className="space-y-2 rounded-md border p-2" data-testid="er-relationship">
+      <FocusRow key={index} focusKey={String(index)} className="space-y-2 rounded-md border p-2" data-testid="er-relationship">
         <div className="flex items-center gap-1">
           <SelectField className="min-w-0 flex-1" ariaLabel={t.linkFrom} value={entry.left} options={nameOptions} onChange={(left) => patch({ left })} />
           <SelectField className="min-w-0 flex-1" ariaLabel={t.linkTo} value={entry.right} options={nameOptions} onChange={(right) => patch({ right })} />
@@ -95,7 +96,7 @@ export function ErInspector({ model, onChange }: Props) {
           {controls(index)}
         </div>
         <CommitField ariaLabel={t.linkLabel} value={entry.label} onCommit={(label) => patch({ label })} />
-      </li>
+      </FocusRow>
     );
   };
 

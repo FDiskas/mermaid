@@ -16,6 +16,7 @@ import {
   type Merge,
 } from "@/lib/git-graph";
 import { AddButton, CommitField, DeleteButton, MoveButtons, SelectField, Section } from "./fields";
+import { FocusRow } from "./focus";
 
 interface Props {
   model: GitModel;
@@ -56,7 +57,7 @@ export function GitInspector({ model, onChange }: Props) {
             if (entry.type === "raw") return null;
             const title = { commit: t.gitCommit, branch: t.gitBranch, checkout: t.gitCheckout, merge: t.gitMerge }[entry.type];
             return (
-              <li key={index} className="space-y-2 rounded-md border p-2" data-testid="git-command">
+              <FocusRow key={index} focusKey={String(index)} className="space-y-2 rounded-md border p-2" data-testid="git-command">
                 <div className="flex items-center gap-1">
                   <span className="text-muted-foreground flex-1 px-1 text-xs font-semibold tracking-wide uppercase">{title}</span>
                   <MoveButtons canMoveUp={canMove(model, index, -1)} canMoveDown={canMove(model, index, 1)} upLabel={t.moveUp} downLabel={t.moveDown} onMove={(step) => onChange(moveEntry(model, index, step))} />
@@ -78,7 +79,7 @@ export function GitInspector({ model, onChange }: Props) {
                     {optionFields(entry, index)}
                   </>
                 )}
-              </li>
+              </FocusRow>
             );
           })}
         </ul>

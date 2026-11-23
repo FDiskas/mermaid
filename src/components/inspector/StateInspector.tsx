@@ -1,3 +1,4 @@
+import { stateKey } from "@/lib/focus/state";
 import { useTranslate } from "@/lib/i18n";
 import {
   TERMINAL_STATE,
@@ -14,6 +15,7 @@ import {
   type StateModel,
 } from "@/lib/state";
 import { AddButton, CommitField, DeleteButton, MoveButtons, SelectField, Section } from "./fields";
+import { FocusRow } from "./focus";
 
 interface Props {
   model: StateModel;
@@ -30,7 +32,7 @@ export function StateInspector({ model, onChange }: Props) {
       <Section title={t.states}>
         <ul className="space-y-2">
           {ids.map((id) => (
-            <li key={id} className="space-y-2 rounded-md border p-2" data-testid="state-item">
+            <FocusRow key={id} focusKey={stateKey(id)} className="space-y-2 rounded-md border p-2" data-testid="state-item">
               <div className="flex items-center gap-1">
                 <span className="min-w-0 flex-1 truncate px-1 font-mono text-xs" title={id}>
                   {id}
@@ -38,7 +40,7 @@ export function StateInspector({ model, onChange }: Props) {
                 <DeleteButton label={t.delete} onClick={() => onChange(removeState(model, id))} />
               </div>
               <CommitField ariaLabel={t.stateDescription} value={stateText(model, id)} onCommit={(text) => onChange(setStateText(model, id, text))} />
-            </li>
+            </FocusRow>
           ))}
         </ul>
         <AddButton onClick={() => onChange(addState(model, t.newStateText))}>{t.addState}</AddButton>
@@ -47,7 +49,7 @@ export function StateInspector({ model, onChange }: Props) {
         <ul className="space-y-2">
           {model.entries.map((entry, index) =>
             entry.type === "transition" ? (
-              <li key={index} className="space-y-2 rounded-md border p-2" data-testid="state-transition">
+              <FocusRow key={index} focusKey={String(index)} className="space-y-2 rounded-md border p-2" data-testid="state-transition">
                 <div className="flex items-center gap-1">
                   <SelectField className="min-w-0 flex-1" ariaLabel={t.linkFrom} value={entry.from} options={endpointOptions} onChange={(from) => onChange(updateTransition(model, index, { from }))} />
                   <SelectField className="min-w-0 flex-1" ariaLabel={t.linkTo} value={entry.to} options={endpointOptions} onChange={(to) => onChange(updateTransition(model, index, { to }))} />
@@ -63,7 +65,7 @@ export function StateInspector({ model, onChange }: Props) {
                   />
                   <DeleteButton label={t.delete} onClick={() => onChange(removeEntry(model, index))} />
                 </div>
-              </li>
+              </FocusRow>
             ) : null,
           )}
         </ul>

@@ -87,6 +87,7 @@ const baseTheme = EditorView.theme({
   ".cm-activeLineGutter": { backgroundColor: "transparent", color: "var(--foreground)" },
   ".cm-cursor": { borderLeftColor: "var(--foreground)" },
   ".cm-tooltip": { backgroundColor: "var(--popover)", color: "var(--popover-foreground)", border: "1px solid var(--border)" },
+  ".cm-focus-line": { backgroundColor: "rgb(59 130 246 / 0.18)", boxShadow: "inset 3px 0 0 #3b82f6" },
   ".cm-panels": { backgroundColor: "var(--panel)", color: "var(--foreground)" },
 });
 

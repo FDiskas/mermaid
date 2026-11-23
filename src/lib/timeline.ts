@@ -29,7 +29,12 @@ const INDENT = "    ";
 
 /** A colon splits a period from its events, so a colon inside a text is written as Mermaid's entity code. */
 const encodeText = (text: string) => text.replace(/\s*\r?\n\s*/g, " ").replace(/:/g, COLON_ENTITY);
-const decodeText = (text: string) => text.split(COLON_ENTITY).join(":");
+export const decodeText = (text: string) => text.split(COLON_ENTITY).join(":");
+
+export const SECTION_LINE = /^section\s+(.*)$/;
+export const TITLE_LINE = /^title\s+(.*)$/;
+/** Lines this editor keeps without reading them. */
+export const EXTRA_LINE = /^(?:%%|acc(?:Title|Descr)\b)/;
 
 export function parseTimeline(code: string): TimelineModel | null {
   const lines = code.split(/\r?\n/);
@@ -54,15 +59,15 @@ export function parseTimeline(code: string): TimelineModel | null {
     const line = raw.trim();
     if (line === "") continue;
 
-    const sectionLine = /^section\s+(.*)$/.exec(line);
-    const titleLine = /^title\s+(.*)$/.exec(line);
+    const sectionLine = SECTION_LINE.exec(line);
+    const titleLine = TITLE_LINE.exec(line);
     if (sectionLine) {
       section = { title: decodeText((sectionLine[1] ?? "").trim()), periods: [] };
       model.sections.push(section);
       period = null;
     } else if (titleLine) {
       model.title = (titleLine[1] ?? "").trim();
-    } else if (line.startsWith("%%") || /^acc(Title|Descr)\b/.test(line)) {
+    } else if (EXTRA_LINE.test(line)) {
       model.extra.push(line);
     } else if (line.startsWith(":") && period) {
       period.events.push(...splitEvents(line.slice(1)));
@@ -78,7 +83,7 @@ export function parseTimeline(code: string): TimelineModel | null {
 }
 
 /** One text is one event. A blank text is no event. */
-function splitEvents(text: string): string[] {
+export function splitEvents(text: string): string[] {
   const event = decodeText(text.trim());
   return event === "" ? [] : [event];
 }

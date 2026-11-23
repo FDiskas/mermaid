@@ -44,6 +44,10 @@ interface Props {
   /** Changing this value refits the diagram to the canvas. */
   fitToken: number;
   dimmed?: boolean;
+  /** The elements that draw the item in focus (diagram types other than flowcharts). `null` when nothing is in focus. */
+  locateFocus?: ((root: SVGSVGElement) => Element[]) | null;
+  /** The diagram type has no click-to-select of its own: a click on an element is reported here, a click on the background too. */
+  onPick?: ((target: Element) => void) | null;
   /** `additive`: Shift, Ctrl or Cmd was held, so the click adds to or removes from the selection. */
   onSelect(selection: Selection, additive: boolean): void;
   getLabel(selection: NonNullable<Selection>): string | undefined;
@@ -60,7 +64,7 @@ const FIT_TOP = 72; // room for the floating toolbar
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 export const PreviewCanvas = forwardRef<PreviewCanvasHandle, Props>(function PreviewCanvas(props, ref) {
-  const { diagram, emptyMessage, editable, selected, connectSource, connecting, fitToken, dimmed, onSelect, getLabel, onCommitLabel, onScaleChange } = props;
+  const { diagram, emptyMessage, editable, selected, connectSource, connecting, fitToken, dimmed, locateFocus, onPick, onSelect, getLabel, onCommitLabel, onScaleChange } = props;
   const container = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<View>({ x: 0, y: 0, k: 1 });
@@ -168,6 +172,14 @@ export const PreviewCanvas = forwardRef<PreviewCanvasHandle, Props>(function Pre
     if (connectSource) findTargetElement(root, { kind: "node", id: connectSource })?.classList.add("mv-connect-source");
   }, [diagram, selected, connectSource, editable]);
 
+  // Mark the item in focus for the diagram types that are not flowcharts.
+  useLayoutEffect(() => {
+    const root = content.current?.querySelector("svg");
+    if (!root) return;
+    root.querySelectorAll(".mv-focus").forEach((el) => el.classList.remove("mv-focus"));
+    locateFocus?.(root).forEach((el) => el.classList.add("mv-focus"));
+  }, [diagram, locateFocus]);
+
   const drag = useRef<DragStart | null>(null);
 
   // Fingers (and pens) currently down. A mouse is not tracked here: it cannot pinch, and its release outside
@@ -246,7 +258,10 @@ export const PreviewCanvas = forwardRef<PreviewCanvasHandle, Props>(function Pre
       panned.current = false;
       return;
     }
-    if (!editable) return;
+    if (!editable) {
+      onPick?.(event.target as Element);
+      return;
+    }
     onSelect(targetFromElement(event.target as Element), event.shiftKey || event.metaKey || event.ctrlKey);
   };
 
@@ -271,6 +286,7 @@ export const PreviewCanvas = forwardRef<PreviewCanvasHandle, Props>(function Pre
       className={cn(
         "canvas-surface relative h-full w-full touch-none overflow-hidden select-none",
         editable && "mv-editable",
+        onPick && "mv-pickable",
         connecting && "mv-connecting",
         "cursor-grab active:cursor-grabbing",
       )}
